@@ -1,0 +1,80 @@
+﻿<Window x:Class="SnakeLadder.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SnakeLadder" xmlns:fa="http://schemas.fontawesome.io/icons/"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="650" Width="650" MinHeight="650" MinWidth="650">
+    <Grid Name="GridPP">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="2" Grid.RowSpan="3">
+        <Label Content="Rules:" FontSize="20" />
+            <Label  Content="💣 Lose 1-12 spaces" FontSize="14"/>
+            <Label  Content="🚀 Gain 1-6 spaces" FontSize="14" HorizontalAlignment="Center"/>
+            <Label  Content="First to 100 win" FontSize="14" HorizontalAlignment="Center"/>
+        </StackPanel>
+        <Button x:Name="Dice" Click="Dice_Click" IsEnabled="False" Grid.Column="0" Grid.Row="7" Grid.RowSpan="3">
+            <StackPanel>
+                <Label Content="Roll Dice"></Label>
+                <Image x:Name="Imagin" Source="C:\Users\guyso\Downloads\DicePhoto.png"/>
+            </StackPanel>
+            
+        </Button>
+        <TextBlock x:Name="message1" Grid.Row="6"  FontSize="14" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Start point " FontSize="22" FontWeight="Bold" Background="#FF80FF00"/>
+        <TextBlock Text="finish here" TextAlignment="Right" FontSize="20" Grid.Row="10" Grid.Column="0" Background="#FF8037C8" />
+        <Label Name="lable" Content="Select number of players" Grid.Row="4"/>
+        <ComboBox HorizontalContentAlignment="Center" FontSize="18" Name="How_much" Grid.Row="5" SelectionChanged="How_much_SelectionChanged">
+            <ComboBoxItem Content="--SELECT--"/>
+            <ComboBoxItem Content="1"/>
+            <ComboBoxItem Content="2"/>
+            <ComboBoxItem Content="3"/>
+            <ComboBoxItem Content="4"/>
+            <ComboBoxItem Content="5"/>
+            <ComboBoxItem Content="6"/>
+        </ComboBox>
+
+
+        <fa:ImageAwesome Icon="Rocket" Foreground="Blue" Panel.ZIndex="1" Grid.Row="3" Grid.Column="3" />
+        <fa:ImageAwesome Panel.ZIndex="1" Icon="Bomb" Foreground="Red" Grid.Row="2" Grid.Column="6"/>
+        <fa:ImageAwesome Icon="Rocket" Foreground="Blue" Panel.ZIndex="1" Grid.Row="3" Grid.Column="9" />
+        <fa:ImageAwesome Panel.ZIndex="1" Icon="Bomb" Foreground="Red" Grid.Row="10" Grid.Column="3"/>
+        <fa:ImageAwesome Icon="Rocket" Panel.ZIndex="1" Foreground="Blue" Grid.Row="8" Grid.Column="10" />
+        <fa:ImageAwesome Panel.ZIndex="1" Icon="Bomb" Foreground="Red" Grid.Row="2" Grid.Column="6"/>
+        <fa:ImageAwesome Icon="Rocket" Panel.ZIndex="1" Foreground="Blue" Grid.Row="7" Grid.Column="3" />
+        <fa:ImageAwesome Panel.ZIndex="1" Icon="Bomb" Grid.Row="10" Foreground="Red" Grid.Column="7"/>
+        <fa:ImageAwesome Icon="Rocket" Panel.ZIndex="1" Grid.Row="1" Foreground="Blue" Grid.Column="4" />
+        <fa:ImageAwesome Panel.ZIndex="1" Foreground="Red" Icon="Bomb" Grid.Row="8" Grid.Column="9"/>
+        <fa:ImageAwesome Icon="Rocket" Panel.ZIndex="1" Grid.Row="5" Foreground="Blue" Grid.Column="4" />
+        <fa:ImageAwesome Panel.ZIndex="1" Foreground="Red" Icon="Bomb" Grid.Row="9" Grid.Column="1"/>
+
+    </Grid>
+</Window>
