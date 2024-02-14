@@ -7,7 +7,7 @@ Screen size of at least 1050x520
 
 # Rules
 <ul>
-li>Landing on bomb lose you 1-12 spaces</li>
+<li>Landing on bomb lose you 1-12 spaces</li>
 <li>landing on rocket gain you 1-6 spaces </li>
 <li>   First to land on 100 wins</li>
 <li> Press esc to exit</li>
