@@ -1,4 +1,6 @@
-﻿using System;
+﻿using gameLogic;
+using GameLogic.Models;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -16,9 +18,8 @@ namespace SnakeLadder
 {
     public partial class menu : Window
     {
-
+        MainGameLogic gameLogic = new MainGameLogic();
         private static int players;
-        private List<player> playerData = new List<player>();      //keeps the data about every player
         private int turn = 1;   //keep tracks of who's turn is it 
         private static int boot;
         private void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -28,13 +29,13 @@ namespace SnakeLadder
                 players = How_much.SelectedIndex;
                 How_much.IsEnabled = false;   //after the amount of players has chosen this combobox is unrelevent
                 lablePlayers.Content = $"{players} players chosen";
-                for (int i = 0; i < players; i++) playerData.Add(new player(i + 1, 0, new TextBlock()));   //initialize the stats of evert player
-                here.ItemsSource = playerData;   //after we filled the needed stats we'll send the information to a listbox that will ask the players for the remaining needed information
+                for (int i = 0; i < players; i++) gameLogic.playerData.Add(new Player(i + 1, 0, new TextBlock()));   //initialize the stats of evert player
+                here.ItemsSource = gameLogic.playerData;   //after we filled the needed stats we'll send the information to a listbox that will ask the players for the remaining needed information
                 int left = 0;
                 int bottom = 0;
                 for (int padd = 0; padd < players; padd++)
                 {
-                    playerData[padd].TextBlock.Padding = new Thickness(left, 0, 0, bottom);   //set a specipic place for every player so in case multiple player will be on the same box they could see their charactor
+                    gameLogic.playerData[padd].TextBlock.Padding = new Thickness(left, 0, 0, bottom);   //set a specipic place for every player so in case multiple player will be on the same box they could see their charactor
                        //since 6 players is the maximum amount of players we can have
                     left += 25;
                     left = padd == 2 ? 0 : left;                  //order will be: 1)Left   2)Middle 3)Rigth  4)Left 5)Middle 6)Rigth
@@ -53,27 +54,28 @@ namespace SnakeLadder
 
         private void info_Click(object sender, RoutedEventArgs e)
         {
-               //after failing to get the charactor directly from the window the best option is to get the index of the chosen charactor and compare it with list that will have the same values
-            List<string> strings = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };
-            try   //there will be an error if the player will send null info, thus we'll use try & catch
-            {
-                foreach (player player in playerData)   
-                {
-                    if (string.IsNullOrEmpty(player.Name)) throw new ArgumentNullException();   //name is requried 
-                    player.strIcons = strings[player.intIcons].ToString();   //turning the charactor from number to their simbol
-                    player.TextBlock.Text = player.strIcons;
-                }
-                   //after reciving the needed info these boxes isn't necessary
-                info.Visibility = Visibility.Hidden;
-                here.Visibility = Visibility.Hidden;
+            gameLogic.info_Click(sender,e, ref info,ref  here, ref Dice, ref its);
+            //   //after failing to get the charactor directly from the window the best option is to get the index of the chosen charactor and compare it with list that will have the same values
+            //List<string> strings = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };
+            //try   //there will be an error if the player will send null info, thus we'll use try & catch
+            //{
+            //    foreach (Player player in gameLogic.playerData)   
+            //    {
+            //        if (string.IsNullOrEmpty(player.Name)) throw new ArgumentNullException();   //name is requried 
+            //        player.strIcons = strings[player.intIcons].ToString();   //turning the charactor from number to their simbol
+            //        player.TextBlock.Text = player.strIcons;
+            //    }
+            //       //after reciving the needed info these boxes isn't necessary
+            //    info.Visibility = Visibility.Hidden;
+            //    here.Visibility = Visibility.Hidden;
 
-                Dice.IsEnabled = true;   //make the dice clickable
-                its.Text = "Player 1's turn";   //since it's the start, it's player 1's turn
-            }
-            catch
-            {
-                MessageBox.Show("fill everything please");
-            }
+            //    Dice.IsEnabled = true;   //make the dice clickable
+            //    its.Text = "Player 1's turn";   //since it's the start, it's player 1's turn
+            //}
+            //catch
+            //{
+            //    MessageBox.Show("fill everything please");
+            //}
         }
 
         public menu()
@@ -89,25 +91,25 @@ namespace SnakeLadder
             Random random = new Random();
             int rolled = random.Next(1, 7);   //present a cube throw
             dikk(rolled);   //the random number showed to the player
-            playerData[turn - 1].Place += rolled;   //advance the player relatively to his throw
-            if (playerData[turn - 1].Place > 100) playerData[turn - 1].Place = 100 - (playerData[turn - 1].Place - 100);   //if the player's roll surpass 100 he'll go back the amount he went over
-            else if (playerData[turn - 1].Place == 100)   //if the player land on 100 he wins
+            gameLogic.playerData[turn - 1].Place += rolled;   //advance the player relatively to his throw
+            if (gameLogic.playerData[turn - 1].Place > 100) gameLogic.playerData[turn - 1].Place = 100 - (gameLogic.playerData[turn - 1].Place - 100);   //if the player's roll surpass 100 he'll go back the amount he went over
+            else if (gameLogic.playerData[turn - 1].Place == 100)   //if the player land on 100 he wins
             {
-                MessageBox.Show($"player {turn}. {playerData[turn - 1].Name} won");
+                MessageBox.Show($"player {turn}. {gameLogic.playerData[turn - 1].Name} won");
                 MainWindow main = new MainWindow();
                 this.Close();   // close current window
                 main.Show();   // goes back to menu
             }
                //we can use both "playerData" and "turn" to use the data of the player currently rolling. since "turn" resets at 1 and list start from 0 we'll need to subtrack 1 from turn to have perfect connection
             int Row =    //every row is 10 spaces, every row is from column 1-10
-                 playerData[turn - 1].Place % 10 != 0 ? 1 + playerData[turn - 1].Place / 10    //example: player on place 8-> 8/10=0 but we start our column from 1 therefore we'll add 1 to match our board-> 1+8/10=1+0-> row=1
-               : playerData[turn - 1].Place / 10;   //example: player land on 10-> 10/10=1, since every row is 10 spaces, in this case, it will be wrong to add 1-> 10/10=1 -> row=1
+                 gameLogic.playerData[turn - 1].Place % 10 != 0 ? 1 + gameLogic.playerData[turn - 1].Place / 10    //example: player on place 8-> 8/10=0 but we start our column from 1 therefore we'll add 1 to match our board-> 1+8/10=1+0-> row=1
+               : gameLogic.playerData[turn - 1].Place / 10;   //example: player land on 10-> 10/10=1, since every row is 10 spaces, in this case, it will be wrong to add 1-> 10/10=1 -> row=1
 
             int Colom =   //every column is 10 spaces, every colomn is from row 1-10, every 2nd row the direction is changed-> example:1st row goes left to right, 2nd row goes from right to left 
-                Row % 2 != 0 && playerData[turn - 1].Place % 10 == 0 ? 10   //example:10-> 10's row is 1 using the row's formula, 1%2!=0 and 10%10=0 -> column is set to 10
-              : Row % 2 == 0 && playerData[turn - 1].Place % 10 == 0 ? 1   //example:20-> 20's row is 2, 2%2=0 and 20%10=0 -> column is set to 1
-              : Row % 2 == 0 && playerData[turn - 1].Place % 10 != 0 ? 11 - (playerData[turn - 1].Place % 10)   //example:11-> 11's row is 2, 2%2=0 and 11%10=1 -> since every 2nd row the path is from right to left we'll count from the right ->11-(11%10)=11-1-> column=10    
-              : playerData[turn - 1].Place % 10;   //example:1-> 1's row is 1, 1%2!=0 and 1%10=1 -> column=1
+                Row % 2 != 0 && gameLogic.playerData[turn - 1].Place % 10 == 0 ? 10   //example:10-> 10's row is 1 using the row's formula, 1%2!=0 and 10%10=0 -> column is set to 10
+              : Row % 2 == 0 && gameLogic.playerData[turn - 1].Place % 10 == 0 ? 1   //example:20-> 20's row is 2, 2%2=0 and 20%10=0 -> column is set to 1
+              : Row % 2 == 0 && gameLogic.playerData[turn - 1].Place % 10 != 0 ? 11 - (gameLogic.playerData[turn - 1].Place % 10)   //example:11-> 11's row is 2, 2%2=0 and 11%10=1 -> since every 2nd row the path is from right to left we'll count from the right ->11-(11%10)=11-1-> column=10    
+              : gameLogic.playerData[turn - 1].Place % 10;   //example:1-> 1's row is 1, 1%2!=0 and 1%10=1 -> column=1
 
             int total = 0;   //count the total spaces player gained/lost cause of bombs/rockets
             bool bom = false;   //if player land on bomb raise flag
@@ -118,39 +120,39 @@ namespace SnakeLadder
             {
                 falg = false;
                 List<int> boost = new List<int>() { 4, 23, 29, 44, 63, 71 };   //places of every rocket on the board
-                foreach (int placeBoost in boost) if (placeBoost == playerData[turn - 1].Place)
+                foreach (int placeBoost in boost) if (placeBoost == gameLogic.playerData[turn - 1].Place)
                     {
                            //if player land on rocket show the charactor on the rocket before moving him
-                        GridPP.Children.Remove(playerData[turn - 1].TextBlock);
-                        Grid.SetRow(playerData[turn - 1].TextBlock, Row);
-                        Grid.SetColumn(playerData[turn - 1].TextBlock, Colom);
-                        GridPP.Children.Add(playerData[turn - 1].TextBlock);
+                        GridPP.Children.Remove(gameLogic.playerData[turn - 1].TextBlock);
+                        Grid.SetRow(gameLogic.playerData[turn - 1].TextBlock, Row);
+                        Grid.SetColumn(gameLogic.playerData[turn - 1].TextBlock, Colom);
+                        GridPP.Children.Add(gameLogic.playerData[turn - 1].TextBlock);
 
                         MessageBox.Show($"Player {turn} hit rocket");
                         boot = random.Next(1, 7);   //landing on rocket makes you gain randomly between 1-6 spaces
                         total += boot;
-                        playerData[turn - 1].Place += boot;
+                        gameLogic.playerData[turn - 1].Place += boot;
                         falg = true;
                         bom = true;
                     }
                 List<int> Bomb = new List<int>() { 15, 72, 81, 94, 98 };   //places of every bomb on the board
-                foreach (int placeBomb in Bomb) if (placeBomb == playerData[turn - 1].Place)
+                foreach (int placeBomb in Bomb) if (placeBomb == gameLogic.playerData[turn - 1].Place)
                     {
                            //if player land on bomb show the charactor on the bomb before moving him
-                        GridPP.Children.Remove(playerData[turn - 1].TextBlock);
-                        Grid.SetRow(playerData[turn - 1].TextBlock, Row);
-                        Grid.SetColumn(playerData[turn - 1].TextBlock, Colom);
-                        GridPP.Children.Add(playerData[turn - 1].TextBlock);
+                        GridPP.Children.Remove(gameLogic.playerData[turn - 1].TextBlock);
+                        Grid.SetRow(gameLogic.playerData[turn - 1].TextBlock, Row);
+                        Grid.SetColumn(gameLogic.playerData[turn - 1].TextBlock, Colom);
+                        GridPP.Children.Add(gameLogic.playerData[turn - 1].TextBlock);
                         MessageBox.Show($"Player {turn} hit bomb");
                         boot = random.Next(1, 13);   //landing on bomb makes you lose randomly between 1-12 spaces
                         total -= boot;
-                        playerData[turn - 1].Place -= boot;
+                        gameLogic.playerData[turn - 1].Place -= boot;
                         falg = true;
                         boos = true;
                     }
                    //in case the bomb/rocket cuased a change of row/column check their value again
-                Row = playerData[turn - 1].Place % 10 != 0 ? 1 + playerData[turn - 1].Place / 10 : playerData[turn - 1].Place / 10;
-                Colom = Row % 2 != 0 && playerData[turn - 1].Place % 10 == 0 ? 10 : Row % 2 == 0 && playerData[turn - 1].Place % 10 == 0 ? 1 : Row % 2 == 0 && playerData[turn - 1].Place % 10 != 0 ? 11 - (playerData[turn - 1].Place % 10) : playerData[turn - 1].Place % 10;
+                Row = gameLogic.playerData[turn - 1].Place % 10 != 0 ? 1 + gameLogic.playerData[turn - 1].Place / 10 : gameLogic.playerData[turn - 1].Place / 10;
+                Colom = Row % 2 != 0 && gameLogic.playerData[turn - 1].Place % 10 == 0 ? 10 : Row % 2 == 0 && gameLogic.playerData[turn - 1].Place % 10 == 0 ? 1 : Row % 2 == 0 && gameLogic.playerData[turn - 1].Place % 10 != 0 ? 11 - (gameLogic.playerData[turn - 1].Place % 10) : gameLogic.playerData[turn - 1].Place % 10;
 
             } while (falg);   //falg raised mean the player land on bomb/rocket and now he's in difference place, therefore we'll need to check if the player land on another bomb/rocket 
 
@@ -165,10 +167,10 @@ namespace SnakeLadder
                 message1.Text = boos && bom ? $"Player {turn} hit bombs\nand boosts. but stayed\nin his space" :
                                                "";
             
-            GridPP.Children.Remove(playerData[turn - 1].TextBlock);
-            Grid.SetRow(playerData[turn - 1].TextBlock, Row);
-            Grid.SetColumn(playerData[turn - 1].TextBlock, Colom);
-            GridPP.Children.Add(playerData[turn - 1].TextBlock);
+            GridPP.Children.Remove(gameLogic.playerData[turn - 1].TextBlock);
+            Grid.SetRow(gameLogic.playerData[turn - 1].TextBlock, Row);
+            Grid.SetColumn(gameLogic.playerData[turn - 1].TextBlock, Colom);
+            GridPP.Children.Add(gameLogic.playerData[turn - 1].TextBlock);
             turn = turn == players ? 1    //if it's the last player's turn then next turn returned to the first player-> 3 players, it's player 3's turn, next turn will be player 1
                 : turn + 1;   //else it's the next player turn-> 3 players, it's player 2's turn, next turn will be player 3
             its.Text = $"Player {turn}'s turn";
@@ -191,27 +193,7 @@ namespace SnakeLadder
                 default:
                     Imagin.Source = new BitmapImage(new Uri("images\\Dice_6.jpg", UriKind.Relative)); break;
             }
-        }
-        public class player
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }   //contain player's name
-            public int intIcons { get; set; }   //get the charactor of the player in number
-            public string strIcons { get; set; }   //turning the property intIcons to a charactor
-            public int Place { get; set; }   //contain the current place of the player
-            public TextBlock TextBlock { get; set; }   //showing the data of the player on the board 
-            public player(int id, int place, TextBlock text)
-            {
-                Id = id;
-                Place = place;
-                TextBlock = text;
-                TextBlock.FontSize = 20;
-                System.Windows.Controls.Panel.SetZIndex(TextBlock, 2);   //makes it so the player's charactor will be on the board but under any message that will appear
-                TextBlock.VerticalAlignment = VerticalAlignment.Bottom;
-                TextBlock.FontWeight = FontWeights.Bold;
-            }
-        }
-
+        }      
 
 
         private void ColorTable()   //since we have the movement path of the game, it's possible to set the movement to 1 space and fill each space with decoration
