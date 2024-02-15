@@ -4,3 +4,9 @@ C:\Users\guyso\source\repos\SnakeLadder\GameLogic\obj\Debug\GameLogic.csproj.Ass
 C:\Users\guyso\source\repos\SnakeLadder\GameLogic\obj\Debug\GameLogic.csproj.CoreCompileInputs.cache
 C:\Users\guyso\source\repos\SnakeLadder\GameLogic\obj\Debug\GameLogic.dll
 C:\Users\guyso\source\repos\SnakeLadder\GameLogic\obj\Debug\GameLogic.pdb
+D:\Projects\Git\Random Cloned Git\Bomb\GameLogic\bin\Debug\GameLogic.dll
+D:\Projects\Git\Random Cloned Git\Bomb\GameLogic\bin\Debug\GameLogic.pdb
+D:\Projects\Git\Random Cloned Git\Bomb\GameLogic\obj\Debug\gameLogic.csproj.AssemblyReference.cache
+D:\Projects\Git\Random Cloned Git\Bomb\GameLogic\obj\Debug\gameLogic.csproj.CoreCompileInputs.cache
+D:\Projects\Git\Random Cloned Git\Bomb\GameLogic\obj\Debug\GameLogic.dll
+D:\Projects\Git\Random Cloned Git\Bomb\GameLogic\obj\Debug\GameLogic.pdb

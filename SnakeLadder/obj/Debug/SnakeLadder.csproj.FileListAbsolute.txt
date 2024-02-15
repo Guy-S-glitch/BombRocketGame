@@ -20,3 +20,26 @@ C:\Users\guyso\source\repos\SnakeLadder\SnakeLadder\bin\Debug\GameLogic.dll
 C:\Users\guyso\source\repos\SnakeLadder\SnakeLadder\bin\Debug\GameLogic.pdb
 C:\Users\guyso\source\repos\SnakeLadder\SnakeLadder\obj\Debug\menu.g.cs
 C:\Users\guyso\source\repos\SnakeLadder\SnakeLadder\obj\Debug\menu.baml
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\bin\Debug\SnakeLadder.exe.config
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\bin\Debug\SnakeLadder.exe
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\bin\Debug\SnakeLadder.pdb
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\bin\Debug\FontAwesome.WPF.dll
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\bin\Debug\GameLogic.dll
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\bin\Debug\GameLogic.pdb
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\bin\Debug\FontAwesome.WPF.xml
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\obj\Debug\SnakeLadder.csproj.AssemblyReference.cache
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\obj\Debug\SnakeLadder.csproj.SuggestedBindingRedirects.cache
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\obj\Debug\MainWindow.g.cs
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\obj\Debug\menu.g.cs
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\obj\Debug\App.g.cs
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\obj\Debug\SnakeLadder_MarkupCompile.cache
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\obj\Debug\SnakeLadder_MarkupCompile.lref
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\obj\Debug\MainWindow.baml
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\obj\Debug\menu.baml
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\obj\Debug\SnakeLadder.g.resources
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\obj\Debug\SnakeLadder.Properties.Resources.resources
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\obj\Debug\SnakeLadder.csproj.GenerateResource.cache
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\obj\Debug\SnakeLadder.csproj.CoreCompileInputs.cache
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\obj\Debug\SnakeLadder.csproj.CopyComplete
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\obj\Debug\SnakeLadder.exe
+D:\Projects\Git\Random Cloned Git\Bomb\SnakeLadder\obj\Debug\SnakeLadder.pdb
