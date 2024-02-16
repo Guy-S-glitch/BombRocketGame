@@ -1,0 +1,133 @@
+﻿<Window x:Class="SnakeLadder.menu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SnakeLadder" xmlns:fa="http://schemas.fontawesome.io/icons/"
+        mc:Ignorable="d"
+        Title="menu" WindowStyle="None" WindowState="Maximized" MinHeight="520" MinWidth="1050">
+    <Grid Name="GridPP">
+        <Grid.Background>
+            <RadialGradientBrush>
+                <GradientStop Color="#FFB1E7A5" Offset="1"/>
+                <GradientStop Color="#FF71B162" Offset="0.8"/>
+            </RadialGradientBrush>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="150"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <Button x:Name="info" Visibility="Hidden" Click="info_Click" Grid.Column="3" Grid.ColumnSpan="6" VerticalAlignment="Bottom" Content="Save and Play" FontSize="30" Panel.ZIndex="4" Grid.Row="3"/>
+        <ListBox x:Name="here" Visibility="Hidden" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="6" Grid.RowSpan="4" Panel.ZIndex="4">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Player: "/>
+                        <Label  Content="{Binding Id ,Mode=OneWay}"/>
+                        <Label Content="Enter your name: "/>
+                        <TextBox MinWidth="30" ToolTip="" Text="{Binding Name ,Mode=OneWayToSource}"/>
+                        <Label Content="Choose your charactor: "/>
+                        <ComboBox  Width="60" SelectedIndex="{Binding intIcons, Mode=OneWayToSource}">
+
+                            <ComboBoxItem Content="🐱"/>
+                            <ComboBoxItem Content="🐼"/>
+                            <ComboBoxItem Content="🐻"/>
+                            <ComboBoxItem Content="🐨"/>
+                            <ComboBoxItem Content="🐮"/>
+                            <ComboBoxItem Content="🐷"/>
+                            <ComboBoxItem Content="🐹"/>
+                            <ComboBoxItem Content="🐭"/>
+                            <ComboBoxItem Content="🐰"/>
+                            <ComboBoxItem Content="🐵"/>
+                            <ComboBoxItem Content="🐶"/>
+                        </ComboBox>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Image  Source="images\start.jpg" Grid.Row="1"/>
+        <StackPanel Grid.Row="1" Grid.Column="11" Grid.RowSpan="8">
+
+            <Button x:Name="Dice" Click="Dice_Click" IsEnabled="False" >
+                <StackPanel >
+                    <Label Content="Roll Dice"></Label>
+                    <Image x:Name="Imagin"  Source="images\DicePhoto.png"/>
+                </StackPanel>
+            </Button>
+
+            <TextBlock x:Name="message1" Grid.Row="6"  FontSize="14" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" />
+            <StackPanel  >
+                <Label Name="lablePlayers" Content="Select number of players"/>
+                <ComboBox HorizontalContentAlignment="Center" FontSize="18" Name="How_much" VerticalAlignment="Top" SelectionChanged="How_much_SelectionChanged">
+                    <ComboBoxItem Content="--SELECT--"/>
+                    <ComboBoxItem Content="1"/>
+                    <ComboBoxItem Content="2"/>
+                    <ComboBoxItem Content="3"/>
+                    <ComboBoxItem Content="4"/>
+                    <ComboBoxItem Content="5"/>
+                    <ComboBoxItem Content="6"/>
+                </ComboBox>
+            </StackPanel>
+            <TextBlock x:Name="its" Margin="0,50" TextWrapping="WrapWithOverflow" FontSize="30"/>
+        </StackPanel>
+        <Button x:Name="back" Grid.Row="9" Grid.Column="11" Content="🏠" FontSize="30" Click="back_Click">
+            
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFE2D45D" Offset="0.2"/>
+                        <GradientStop Color="#FFB30A0A" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+        </Button>
+        <Button x:Name="exit" Grid.Row="10" Grid.Column="11" Content="❌" Click="exit_Click"  FontSize="30">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFE2D45D" Offset="0.2"/>
+                    <GradientStop Color="#FFB30A0A" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <Image Source="images\finito.jpg" Grid.Row="10"/>
+       
+
+        <fa:ImageAwesome Icon="Rocket" Foreground="Blue" Panel.ZIndex="1" Grid.Row="3" Grid.Column="3" />
+        <fa:ImageAwesome Panel.ZIndex="1" Icon="Bomb" Foreground="Red" Grid.Row="2" Grid.Column="6"/>
+        <fa:ImageAwesome Icon="Rocket" Foreground="Blue" Panel.ZIndex="1" Grid.Row="3" Grid.Column="9" />
+        <fa:ImageAwesome Panel.ZIndex="1" Icon="Bomb" Foreground="Red" Grid.Row="10" Grid.Column="3"/>
+        <fa:ImageAwesome Icon="Rocket" Panel.ZIndex="1" Foreground="Blue" Grid.Row="8" Grid.Column="10" />
+        <fa:ImageAwesome Panel.ZIndex="1" Icon="Bomb" Foreground="Red" Grid.Row="2" Grid.Column="6"/>
+        <fa:ImageAwesome Icon="Rocket" Panel.ZIndex="1" Foreground="Blue" Grid.Row="7" Grid.Column="3" />
+        <fa:ImageAwesome Panel.ZIndex="1" Icon="Bomb" Grid.Row="10" Foreground="Red" Grid.Column="7"/>
+        <fa:ImageAwesome Icon="Rocket" Panel.ZIndex="1" Grid.Row="1" Foreground="Blue" Grid.Column="4" />
+        <fa:ImageAwesome Panel.ZIndex="1" Foreground="Red" Icon="Bomb" Grid.Row="8" Grid.Column="9"/>
+        <fa:ImageAwesome Icon="Rocket" Panel.ZIndex="1" Grid.Row="5" Foreground="Blue" Grid.Column="4" />
+        <fa:ImageAwesome Panel.ZIndex="1" Foreground="Red" Icon="Bomb" Grid.Row="9" Grid.Column="1"/>
+
+    </Grid>
+</Window>
+
