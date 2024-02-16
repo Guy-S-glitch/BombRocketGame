@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SnakeLadder" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="MainWindow" WindowState="Maximized">
+        Title="MainWindow" WindowStyle="None" WindowState="Maximized">
     <Grid>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -30,30 +30,31 @@
         <Label Content="BOMBS AND ROCKETS" HorizontalContentAlignment="Center" Grid.Column="1" Grid.Row="1" FontFamily="Algerian" FontStyle="Italic" FontSize="30" />
 
         <StackPanel x:Name="Men" Grid.Column="1" Grid.Row="3">
-            <Button x:Name="Play" Click="Play_Click" Content="Play" Margin="0,3" BorderThickness="0.5" Background="{x:Null}" FontSize="22">
-                <Button.BorderBrush>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="Black"/>
-                        <GradientStop Color="White" Offset="1"/>
+            <Button x:Name="Play"  Click="Play_Click" Content="Play" Margin="0,3" BorderThickness="0.5"  FontSize="22">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0,0" StartPoint="1,1">
+                        <GradientStop Color="#FF2668A2"/>
+                        <GradientStop Color="#FFDADADA" Offset="1"/>
                     </LinearGradientBrush>
-                </Button.BorderBrush>
+                </Button.Background>
             </Button>
-            <Button x:Name="Rules" Click="Rules_Click" Content="Rules" Margin="0,3" BorderThickness="0.5" Background="{x:Null}" FontSize="22">
-                <Button.BorderBrush>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="Black"/>
-                        <GradientStop Color="White" Offset="1"/>
+            <Button x:Name="Rules" Click="Rules_Click" Content="Rules" Margin="0,20" BorderThickness="0.5" FontSize="22">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0,0" StartPoint="1,1">
+                        <GradientStop Color="#FF2668A2"/>
+                        <GradientStop Color="#FFDADADA" Offset="1"/>
                     </LinearGradientBrush>
-                </Button.BorderBrush>
+                </Button.Background>
             </Button>
-            <Button Content="Exit" x:Name="exit" Click="exit_Click"  Margin="0,3" BorderThickness="0.5"  Background="{x:Null}" FontSize="22">
-                <Button.BorderBrush>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="Black"/>
-                        <GradientStop Color="White" Offset="1"/>
+            <Button Content="Exit" x:Name="exit" Click="exit_Click"  Margin="0,3" BorderThickness="0.5"   FontSize="22">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0,0" StartPoint="1,1">
+                        <GradientStop Color="#FF2668A2"/>
+                        <GradientStop Color="#FFDADADA" Offset="1"/>
                     </LinearGradientBrush>
-                </Button.BorderBrush>
+                </Button.Background>
             </Button>
+
         </StackPanel>
 
 
@@ -74,5 +75,5 @@
             <Label Content="🏠 Press Q to go to menu" Foreground="#FF04D65A" FontSize="22"/>
             <Label Content="🗣️ Press Space to skip dialog" Foreground="#FF9E04D6" FontSize="22"/>
         </StackPanel>
-    </Grid> 
+    </Grid>
 </Window>

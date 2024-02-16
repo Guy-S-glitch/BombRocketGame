@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SnakeLadder" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="menu" WindowState="Maximized" MinHeight="520" MinWidth="1050">
+        Title="menu" WindowStyle="None" WindowState="Maximized" MinHeight="520" MinWidth="1050">
     <Grid Name="GridPP">
         <Grid.Background>
             <RadialGradientBrush>
