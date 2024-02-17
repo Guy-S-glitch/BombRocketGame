@@ -5,3 +5,12 @@ the game is a concept based on the game "Ladders and snakes" where rockets repre
 # Requriments
 Screen size of at least 1050x520
 
+# Rules
+<ul>
+            <li> 💣 Lose 1-12 spaces</li>
+            <li> 🚀 Gain 1-6 spaces</li>
+            <li> 🛬 First to land on 100 wins</li>
+            <li> ❌ Press esc to exit </li>
+            <li> 🏠 Press Q to go to menu </li>
+            <li> 🗣️ Press Space to skip dialog </li>
+</ul>
