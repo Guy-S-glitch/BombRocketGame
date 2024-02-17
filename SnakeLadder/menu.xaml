@@ -49,7 +49,7 @@
                         <Label Content="Player: "/>
                         <Label  Content="{Binding Id ,Mode=OneWay}"/>
                         <Label Content="Enter your name: "/>
-                        <TextBox MinWidth="30" ToolTip="" Text="{Binding Name ,Mode=OneWayToSource}"/>
+                        <TextBox MinWidth="100" Text="{Binding Name ,Mode=OneWayToSource}"/>
                         <Label Content="Choose your character : "/>
                         <ComboBox  Width="60" SelectedIndex="{Binding intIcons, Mode=OneWayToSource}">
 
