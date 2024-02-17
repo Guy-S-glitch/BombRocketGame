@@ -55,27 +55,6 @@ namespace SnakeLadder
         private void info_Click(object sender, RoutedEventArgs e)
         {
             gameLogic.info_Click(sender,e, ref info,ref  here, ref Dice, ref its);
-            //   //after failing to get the character  directly from the window the best option is to get the index of the chosen character  and compare it with list that will have the same values
-            //List<string> strings = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };
-            //try   //there will be an error if the player will send null info, thus we'll use try & catch
-            //{
-            //    foreach (Player player in gameLogic.playerData)   
-            //    {
-            //        if (string.IsNullOrEmpty(player.Name)) throw new ArgumentNullException();   //name is requried 
-            //        player.strIcons = strings[player.intIcons].ToString();   //turning the character  from number to their simbol
-            //        player.TextBlock.Text = player.strIcons;
-            //    }
-            //       //after reciving the needed info these boxes isn't necessary
-            //    info.Visibility = Visibility.Hidden;
-            //    here.Visibility = Visibility.Hidden;
-
-            //    Dice.IsEnabled = true;   //make the dice clickable
-            //    its.Text = "Player 1's turn";   //since it's the start, it's player 1's turn
-            //}
-            //catch
-            //{
-            //    MessageBox.Show("fill everything please");
-            //}
         }
 
         public menu()
@@ -235,9 +214,10 @@ namespace SnakeLadder
         {
             switch (e.Key)
             {
-                case Key.Escape:   //if player press esc exit the game
-                    MessageBox.Show("thanks for playing");
-                    this.Close();
+                case Key.Escape:   //if player press esc ask him if he's sure he want to exit the game
+                    CheckQuit.Visibility = Visibility.Visible;
+                    YesQuit.IsChecked = false;
+                    NoQuit.IsChecked = false;
                     break;
                 case Key.Q:
                     MessageBox.Show("going back to menu");   //if player press Q return to menu
@@ -248,12 +228,7 @@ namespace SnakeLadder
                 default: break;
             }
         }
-        private void exit_Click(object sender, RoutedEventArgs e)   //if player press the exit button exit the game
-        {
-            MessageBox.Show("thanks for playing");
-            this.Close();
-        }
-        
+
         private void back_Click(object sender, RoutedEventArgs e)   //if player press menu button return to the menu 
         {
             MessageBox.Show("going back to menu");
@@ -261,6 +236,23 @@ namespace SnakeLadder
             mainWindow.Show();
             this.Close();
         }
+        private void exit_Click(object sender, RoutedEventArgs e)   //if player press the exit button exit the game
+        {
+            CheckQuit.Visibility = Visibility.Visible;
+            YesQuit.IsChecked = false;
+            NoQuit.IsChecked = false;
+        }
 
+        private void YesQuit_Checked(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("thanks for playing");
+            this.Close();
+        }
+
+        private void NoQuit_Checked(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("returning to the game");
+            CheckQuit.Visibility = Visibility.Hidden;
+        }
     }
 }
