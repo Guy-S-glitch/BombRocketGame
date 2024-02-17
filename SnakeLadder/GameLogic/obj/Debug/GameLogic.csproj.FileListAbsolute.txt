@@ -1,6 +1,0 @@
-C:\Users\guyso\source\repos\SnakeLadder\GameLogic\bin\Debug\GameLogic.dll
-C:\Users\guyso\source\repos\SnakeLadder\GameLogic\bin\Debug\GameLogic.pdb
-C:\Users\guyso\source\repos\SnakeLadder\GameLogic\obj\Debug\GameLogic.csproj.AssemblyReference.cache
-C:\Users\guyso\source\repos\SnakeLadder\GameLogic\obj\Debug\GameLogic.csproj.CoreCompileInputs.cache
-C:\Users\guyso\source\repos\SnakeLadder\GameLogic\obj\Debug\GameLogic.dll
-C:\Users\guyso\source\repos\SnakeLadder\GameLogic\obj\Debug\GameLogic.pdb
