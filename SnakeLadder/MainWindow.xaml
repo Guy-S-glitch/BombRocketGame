@@ -71,8 +71,8 @@
             <Label Content="💣 Lose 1-12 spaces" Foreground="Red" FontSize="22"/>
             <Label Content="🚀 Gain 1-6 spaces" Foreground="LightGreen" FontSize="22"/>
             <Label Content="🛬 First to land on 100 wins" Foreground="#FF5800FF" FontSize="22"/>
-            <Label Content="❌ Press esc to exit" Foreground="#FF8A2727" FontSize="22"/>
-            <Label Content="🏠 Press Q to go to menu" Foreground="#FF04D65A" FontSize="22"/>
+            <Label Content="❌ Press Esc to exit" Foreground="#FF8A2727" FontSize="22"/>
+            <Label Content="🏠 Press Home to go to menu" Foreground="#FF04D65A" FontSize="22"/>
             <Label Content="🗣️ Press Space to skip dialog" Foreground="#FF9E04D6" FontSize="22"/>
         </StackPanel>
     </Grid>

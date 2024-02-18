@@ -28,7 +28,7 @@ namespace SnakeLadder
             {
                 players = How_much.SelectedIndex;
                 How_much.IsEnabled = false;   //after the amount of players has chosen this combobox is unrelevent
-                lablePlayers.Content = $"{players} players chosen";
+                //lablePlayers.Content = $"{players} players chosen";
                 for (int i = 0; i < players; i++) gameLogic.playerData.Add(new Player(i + 1, 0, new TextBlock()));   //initialize the stats of evert player
                 here.ItemsSource = gameLogic.playerData;   //after we filled the needed stats we'll send the information to a listbox that will ask the players for the remaining needed information
                 int left = 0;
@@ -45,10 +45,12 @@ namespace SnakeLadder
                        //minimum width of the screen will have to be: 150+(10*minimumWidthOfOneBlock)+150>width -> minimumWidthOfOneBlock=3*25=75 -> 150+(10*75)+150= 1050 = minimum width
                 }
                 How_much.Visibility = Visibility.Hidden;
+                sele.Visibility = Visibility.Hidden;
 
                    //after selecting how many playing now we need to know information on each player
                 info.Visibility = Visibility.Visible;
                 here.Visibility = Visibility.Visible;
+                
             }
         }
 
@@ -219,7 +221,7 @@ namespace SnakeLadder
                     YesQuit.IsChecked = false;
                     NoQuit.IsChecked = false;
                     break;
-                case Key.Q:
+                case Key.Home:
                     MessageBox.Show("going back to menu");   //if player press Q return to menu
                     MainWindow mainWindow = new MainWindow();
                     mainWindow.Show();

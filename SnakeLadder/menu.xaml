@@ -41,6 +41,25 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
+        <StackPanel x:Name="sele" Grid.Column="3" Grid.ColumnSpan="6" Panel.ZIndex="4"  Grid.Row="3" Grid.RowSpan="6">
+            <StackPanel.Background>
+                <RadialGradientBrush>
+                    <GradientStop Color="#FF6C3C67" Offset="0.802"/>
+                    <GradientStop Color="#FFEF73E2" Offset="0"/>
+                </RadialGradientBrush>
+            </StackPanel.Background>
+
+            <TextBlock Name="lablePlayers" Text="Before playing the game please select number of players" TextWrapping="WrapWithOverflow" FontSize="30" FontWeight="Bold"/>
+            <ComboBox  HorizontalContentAlignment="Center" FontSize="18" Name="How_much" VerticalAlignment="Top" SelectionChanged="How_much_SelectionChanged">
+                <ComboBoxItem Content="--SELECT--"/>
+                <ComboBoxItem Content="1"/>
+                <ComboBoxItem Content="2"/>
+                <ComboBoxItem Content="3"/>
+                <ComboBoxItem Content="4"/>
+                <ComboBoxItem Content="5"/>
+                <ComboBoxItem Content="6"/>
+            </ComboBox>
+        </StackPanel>
         <Button x:Name="info" Visibility="Hidden" Click="info_Click" Grid.Column="3" Grid.ColumnSpan="6" VerticalAlignment="Bottom" Content="Save and Play" FontSize="30" Panel.ZIndex="4" Grid.Row="3"/>
         <ListBox x:Name="here" Visibility="Hidden" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="6" Grid.RowSpan="4" Panel.ZIndex="4">
             <ListBox.ItemTemplate>
@@ -96,28 +115,17 @@
             </Button>
 
             <TextBlock x:Name="message1" Grid.Row="6"  FontSize="14" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" />
-            <StackPanel  >
-                <Label Name="lablePlayers" Content="Select number of players"/>
-                <ComboBox HorizontalContentAlignment="Center" FontSize="18" Name="How_much" VerticalAlignment="Top" SelectionChanged="How_much_SelectionChanged">
-                    <ComboBoxItem Content="--SELECT--"/>
-                    <ComboBoxItem Content="1"/>
-                    <ComboBoxItem Content="2"/>
-                    <ComboBoxItem Content="3"/>
-                    <ComboBoxItem Content="4"/>
-                    <ComboBoxItem Content="5"/>
-                    <ComboBoxItem Content="6"/>
-                </ComboBox>
-            </StackPanel>
+
             <TextBlock x:Name="its" Margin="0,50" TextWrapping="WrapWithOverflow" FontSize="30"/>
         </StackPanel>
         <Button x:Name="back" Grid.Row="9" Grid.Column="11" Content="🏠" FontSize="30" Click="back_Click">
-            
-                <Button.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#FFE2D45D" Offset="0.2"/>
-                        <GradientStop Color="#FFB30A0A" Offset="1"/>
-                    </LinearGradientBrush>
-                </Button.Background>
+
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFE2D45D" Offset="0.2"/>
+                    <GradientStop Color="#FFB30A0A" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
         </Button>
         <Button x:Name="exit" Grid.Row="10" Grid.Column="11" Content="❌" Click="exit_Click"  FontSize="30">
             <Button.Background>
@@ -128,7 +136,7 @@
             </Button.Background>
         </Button>
         <Image Source="images\finito.jpg" Grid.Row="10"/>
-       
+
 
         <fa:ImageAwesome Icon="Rocket" Foreground="Blue" Panel.ZIndex="1" Grid.Row="3" Grid.Column="3" />
         <fa:ImageAwesome Panel.ZIndex="1" Icon="Bomb" Foreground="Red" Grid.Row="2" Grid.Column="6"/>
