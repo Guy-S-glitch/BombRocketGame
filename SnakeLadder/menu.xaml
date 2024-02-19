@@ -70,20 +70,7 @@
                         <Label Content="Enter your name: "/>
                         <TextBox MinWidth="120" Text="{Binding Name ,Mode=OneWayToSource}"/>
                         <Label Content="Choose your character : "/>
-                        <ComboBox  Width="60" SelectedIndex="{Binding intIcons, Mode=OneWayToSource}">
-
-                            <ComboBoxItem Content="🐱"/>
-                            <ComboBoxItem Content="🐼"/>
-                            <ComboBoxItem Content="🐻"/>
-                            <ComboBoxItem Content="🐨"/>
-                            <ComboBoxItem Content="🐮"/>
-                            <ComboBoxItem Content="🐷"/>
-                            <ComboBoxItem Content="🐹"/>
-                            <ComboBoxItem Content="🐭"/>
-                            <ComboBoxItem Content="🐰"/>
-                            <ComboBoxItem Content="🐵"/>
-                            <ComboBoxItem Content="🐶"/>
-                        </ComboBox>
+                        <ComboBox ItemsSource="{Binding charactersHere,Mode=OneWay}" SelectionChanged="ComboBox_SelectionChanged" Width="60" SelectedIndex="{Binding intIcons, Mode=TwoWay}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

@@ -11,6 +11,7 @@ namespace gameLogic
 {
     public class PreGame
     {
+        public List<string> strings = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };   //after failing to get the character  directly from the window the best option is to get the index of the chosen character  and compare it with list that will have the same values
         public List<Player> playerData = new List<Player>();      //keeps the data about every player
         public int players;
         public void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e,ref ComboBox How_much,ref ListBox here,ref StackPanel sele,ref Button info)
@@ -22,6 +23,7 @@ namespace gameLogic
                 //lablePlayers.Content = $"{players} players chosen";
                 for (int i = 0; i < players; i++) playerData.Add(new Player(i + 1, 0, new TextBlock()));   //initialize the stats of evert player
                 here.ItemsSource = playerData;   //after we filled the needed stats we'll send the information to a listbox that will ask the players for the remaining needed information
+                
                 int left = 0;
                 int bottom = 0;
                 for (int padd = 0; padd < players; padd++)
@@ -46,8 +48,7 @@ namespace gameLogic
         }
         public void info_Click(object sender, RoutedEventArgs e, ref Button info, ref ListBox here, ref Button Dice, ref TextBlock its)
         { 
-            //after failing to get the character  directly from the window the best option is to get the index of the chosen character  and compare it with list that will have the same values
-            List<string> strings = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };
+            
             try   //there will be an error if the player will send null info, thus we'll use try & catch
             {
                 foreach (Player player in playerData)

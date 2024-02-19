@@ -186,5 +186,18 @@ namespace SnakeLadder
             MessageBox.Show("returning to the game");
             CheckQuit.Visibility = Visibility.Hidden;
         }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ComboBox comboBox && comboBox.SelectedItem != null)
+            {
+                comboBox.IsEnabled = false;
+                foreach (Player player in pregameLogic.playerData)
+                {
+                    player.charactersHere.Remove(comboBox.SelectedItem.ToString());
+                }
+            }
+           
+        }
     }
 }

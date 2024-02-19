@@ -1,18 +1,21 @@
-﻿using System;
+﻿using gameLogic;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace GameLogic.Models
 {
+
     public class Player
-    {
+    { 
+
+        PreGame spre = new PreGame();
+        public List<string> charara = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };
+        public List<string> charactersHere { get { return charara; } set{ } }
         public int Id { get; set; }
         public string Name { get; set; }   //contain player's name
-        public int intIcons { get; set; }   //get the character  of the player in number
+        public int intIcons { get { return -1; } set {} }   //get the character  of the player in number
         public string strIcons { get; set; }   //turning the property intIcons to a character 
         public int Place { get; set; }   //contain the current place of the player
         public TextBlock TextBlock { get; set; }   //showing the data of the player on the board 
