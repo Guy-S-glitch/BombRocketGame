@@ -51,10 +51,10 @@ namespace gameLogic
             
             try   //there will be an error if the player will send null info, thus we'll use try & catch
             {
+                
                 foreach (Player player in playerData)
                 {
                     if (string.IsNullOrEmpty(player.Name)) throw new ArgumentNullException();   //name is requried 
-                    player.strIcons = strings[player.intIcons].ToString();   //turning the character  from number to their simbol
                     player.TextBlock.Text = player.strIcons;
                 }
                 //after reciving the needed info these boxes isn't necessary

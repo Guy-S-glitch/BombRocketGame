@@ -70,7 +70,7 @@
                         <Label Content="Enter your name: "/>
                         <TextBox MinWidth="120" Text="{Binding Name ,Mode=OneWayToSource}"/>
                         <Label Content="Choose your character : "/>
-                        <ComboBox ItemsSource="{Binding charactersHere,Mode=OneWay}" SelectionChanged="ComboBox_SelectionChanged" Width="60" SelectedIndex="{Binding intIcons, Mode=OneWayToSource}"/>
+                        <ComboBox ItemsSource="{Binding charactersHere,Mode=OneWay}" SelectionChanged="ComboBox_SelectionChanged" Width="60" SelectedItem="{Binding strIcons,Mode=OneWayToSource}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
