@@ -79,18 +79,58 @@ namespace SnakeLadder
             Amogus.Position = TimeSpan.FromMilliseconds(1);
         }
 
-        private void exit_Click(object sender, RoutedEventArgs e)
+        private void MainWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)   //once a key pressed enter the method
         {
-            MessageBox.Show("thanks for playing");
-            this.Close();
+            switch (e.Key)
+            {
+                case Key.Escape:   //if player press esc ask him if he's sure he want to exit the game
+                    ExitConform();
+                    break;
+                case Key.Home:   //if player press home ask him if he's sure he want to return to the menu
+                    HomeConform();
+                    break;
+                default: break;
+            }
         }
-
-        private void back_Click(object sender, RoutedEventArgs e)
+        private void back_Click(object sender, RoutedEventArgs e)   //if player press menu button return to the menu 
         {
-            MessageBox.Show("going back to menu");
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-            this.Close();
+            HomeConform();
+        }
+        private void exit_Click(object sender, RoutedEventArgs e)   //if player press the exit button exit the game
+        {
+            ExitConform();
+        }
+        private void ExitConform()
+        {
+            object var = MessageBox.Show("Are you sure you  want to exit", "Conform Exit", MessageBoxButton.YesNo);
+            switch (var)
+            {
+                case MessageBoxResult.Yes:
+                    MessageBox.Show("thanks for playing");
+                    this.Close();
+                    break;
+                case MessageBoxResult.No:
+                    MessageBox.Show("returning to the game");
+                    break;
+
+            }
+        }
+        private void HomeConform()
+        {
+            object var = MessageBox.Show("Are you sure you  want to return to the menu", "Conform Menu", MessageBoxButton.YesNo);
+            switch (var)
+            {
+                case MessageBoxResult.Yes:
+                    MessageBox.Show("going back to menu");
+                    MainWindow mainWindow = new MainWindow();
+                    mainWindow.Show();
+                    this.Close();
+                    break;
+                case MessageBoxResult.No:
+                    MessageBox.Show("returning to the game");
+                    break;
+
+            }
         }
     }
 }

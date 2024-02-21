@@ -149,43 +149,53 @@ namespace SnakeLadder
             switch (e.Key)
             {
                 case Key.Escape:   //if player press esc ask him if he's sure he want to exit the game
-                    CheckQuit.Visibility = Visibility.Visible;
-                    YesQuit.IsChecked = false;
-                    NoQuit.IsChecked = false;
+                    ExitConform();
                     break;
-                case Key.Home:
-                    MessageBox.Show("going back to menu");   //if player press home return to menu
-                    MainWindow mainWindow = new MainWindow();
-                    mainWindow.Show();
-                    this.Close();
+                case Key.Home:   //if player press home ask him if he's sure he want to return to the menu
+                    HomeConform();
                     break;
                 default: break;
             }
         }
         private void back_Click(object sender, RoutedEventArgs e)   //if player press menu button return to the menu 
         {
-            MessageBox.Show("going back to menu");
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-            this.Close();
+            HomeConform();
         }
         private void exit_Click(object sender, RoutedEventArgs e)   //if player press the exit button exit the game
         {
-            CheckQuit.Visibility = Visibility.Visible;
-            YesQuit.IsChecked = false;
-            NoQuit.IsChecked = false;
+            ExitConform();
         }
-
-        private void YesQuit_Checked(object sender, RoutedEventArgs e)
+        private void ExitConform()
         {
-            MessageBox.Show("thanks for playing");
-            this.Close();
+            object var = MessageBox.Show("Are you sure you  want to exit", "Conform Exit", MessageBoxButton.YesNo);
+            switch (var)
+            {
+                case MessageBoxResult.Yes:
+                    MessageBox.Show("thanks for playing");
+                    this.Close();
+                    break;
+                case MessageBoxResult.No:
+                    MessageBox.Show("returning to the game");
+                    break;
+
+            }
         }
-
-        private void NoQuit_Checked(object sender, RoutedEventArgs e)
+        private void HomeConform()
         {
-            MessageBox.Show("returning to the game");
-            CheckQuit.Visibility = Visibility.Hidden;
+            object var = MessageBox.Show("Are you sure you  want to return to the menu", "Conform Menu", MessageBoxButton.YesNo);
+            switch (var)
+            {
+                case MessageBoxResult.Yes:
+                    MessageBox.Show("going back to menu");
+                    MainWindow mainWindow = new MainWindow();
+                    mainWindow.Show();
+                    this.Close();
+                    break;
+                case MessageBoxResult.No:
+                    MessageBox.Show("returning to the game");
+                    break;
+
+            }
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

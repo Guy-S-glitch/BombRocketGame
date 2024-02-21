@@ -76,21 +76,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <StackPanel x:Name="CheckQuit" Visibility="Hidden" Panel.ZIndex="5" Grid.Row="3" Grid.Column="3" Grid.RowSpan="3" Grid.ColumnSpan="7" Background="Wheat" >
-            <TextBlock Text="Are you sure you want to exit?" HorizontalAlignment="Center" TextWrapping="Wrap"  FontSize="30" />
-            <StackPanel Orientation="Horizontal">
-                <Viewbox Width="50">
-                    <RadioButton Checked="YesQuit_Checked" x:Name="YesQuit"/>
-                </Viewbox>
-                <Label Content="Yes" Foreground="Green" FontSize="35"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Viewbox Width="50">
-                    <RadioButton Checked="NoQuit_Checked" x:Name="NoQuit"/>
-                </Viewbox>
-                <Label Content="No" Foreground="Red" FontSize="35"/>
-            </StackPanel>
-        </StackPanel>
+      
         <Image  Source="images\start.jpg" Grid.Row="1"/>
         <StackPanel Grid.Row="1" Grid.Column="11" Grid.RowSpan="8">
 
