@@ -54,7 +54,8 @@ namespace gameLogic
                 
                 foreach (Player player in playerData)
                 {
-                    if (string.IsNullOrEmpty(player.Name)) throw new ArgumentNullException();   //name is requried 
+                    if (string.IsNullOrEmpty(player.Name) || string.IsNullOrEmpty(player.strIcons)) throw new ArgumentNullException();   //name is requried
+                                                                                               
                     player.TextBlock.Text = player.strIcons;
                 }
                 //after reciving the needed info these boxes isn't necessary

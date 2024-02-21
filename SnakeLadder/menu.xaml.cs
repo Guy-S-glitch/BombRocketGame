@@ -21,6 +21,7 @@ namespace SnakeLadder
     {
         Decoration decoration = new Decoration();
         PreGame pregameLogic = new PreGame();
+
         
         private static int turn = 1;   //keep tracks of who's turn is it 
         private static int boot;    //used to contain the random amount of spaces the rocket/bomb send you
@@ -52,9 +53,10 @@ namespace SnakeLadder
             else if (pregameLogic.playerData[turn - 1].Place == 100)   //if the player land on 100 he wins
             {
                 MessageBox.Show($"player {turn}. {pregameLogic.playerData[turn - 1].Name} won");
-                MainWindow main = new MainWindow();
+                Celebration celebration = new Celebration(pregameLogic.playerData,pregameLogic.players);
                 this.Close();   // close current window
-                main.Show();   // goes back to menu
+                celebration.Show();   // goes to celebration screen
+                
             }
                //we can use both "playerData" and "turn" to use the data of the player currently rolling. since "turn" resets at 1 and list start from 0 we'll need to subtrack 1 from turn to have perfect connection
             int Row =    //every row is 10 spaces, every row is from column 1-10
@@ -160,7 +162,6 @@ namespace SnakeLadder
                 default: break;
             }
         }
-
         private void back_Click(object sender, RoutedEventArgs e)   //if player press menu button return to the menu 
         {
             MessageBox.Show("going back to menu");

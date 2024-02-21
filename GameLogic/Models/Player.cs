@@ -13,6 +13,7 @@ namespace GameLogic.Models
         public List<string> charara = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };
         public List<string> charactersHere { get { return charara; } }
         public int Id { get; set; }
+        public string trash { get; set; }
         public string Name { get; set; }   //contain player's name
         public string strIcons { get; set; }   //contain the player's character 
         public int Place { get; set; }   //contain the current place of the player
