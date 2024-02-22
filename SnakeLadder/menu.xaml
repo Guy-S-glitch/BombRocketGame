@@ -77,7 +77,7 @@
         </ListBox>
 
       
-        <Image  Source="images\start.jpg" Grid.Row="1"/>
+        <Image  Source="images\start.jpg" Panel.ZIndex="-1" Grid.Row="1"/>
         <StackPanel Grid.Row="1" Grid.Column="11" Grid.RowSpan="8">
 
             <Button x:Name="Dice" Click="Dice_Click" IsEnabled="False" >
@@ -87,7 +87,7 @@
                 </StackPanel>
             </Button>
 
-            <TextBlock x:Name="message1" Grid.Row="6"  FontSize="14" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" />
+            <TextBlock x:Name="message1" Grid.Row="6" TextWrapping="WrapWithOverflow" FontSize="14" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" />
 
             <TextBlock x:Name="its" Margin="0,50" TextWrapping="WrapWithOverflow" FontSize="30"/>
         </StackPanel>

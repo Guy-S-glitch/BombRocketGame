@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +14,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 namespace SnakeLadder
@@ -23,8 +25,10 @@ namespace SnakeLadder
         PreGame pregameLogic = new PreGame();
 
         
-        private static int turn = 1;   //keep tracks of who's turn is it 
+        private int turn = 1;   //keep tracks of who's turn is it 
         private static int boot;    //used to contain the random amount of spaces the rocket/bomb send you
+        private int row=1, column=1;
+        private int currentRow=1, futureRow, currentColumn=0, futureColumn;
         private void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             pregameLogic.How_much_SelectionChanged(sender, e, ref How_much, ref here, ref sele, ref info);
@@ -33,6 +37,16 @@ namespace SnakeLadder
         private void info_Click(object sender, RoutedEventArgs e)
         {
             pregameLogic.info_Click(sender,e, ref info,ref  here, ref Dice, ref its);
+            int initial = 0;
+            foreach (Player iniplayer in pregameLogic.playerData)
+            {
+                GridPP.Children.Remove(pregameLogic.playerData[initial].TextBlock);
+                Grid.SetRow(pregameLogic.playerData[initial].TextBlock, 1);
+                Grid.SetColumn(pregameLogic.playerData[initial].TextBlock, 0);
+                GridPP.Children.Add(pregameLogic.playerData[initial].TextBlock);
+                initial++;
+            }
+            
         }
 
         public menu()
@@ -42,33 +56,57 @@ namespace SnakeLadder
             How_much.SelectedIndex = 0;
             this.KeyDown += MainWindow_KeyDown;   //access responsive key game
         }
-
         private void Dice_Click(object sender, RoutedEventArgs e)
         {
             Random random = new Random();
             int rolled = random.Next(1, 7);   //present a cube throw
             dikk(rolled);   //the random number showed to the player
-            pregameLogic.playerData[turn - 1].Place += rolled;   //advance the player relatively to his throw
-            if (pregameLogic.playerData[turn - 1].Place > 100) pregameLogic.playerData[turn - 1].Place = 100 - (pregameLogic.playerData[turn - 1].Place - 100);   //if the player's roll surpass 100 he'll go back the amount he went over
+            int currentPlace = pregameLogic.playerData[turn - 1].Place;
+            pregameLogic.playerData[turn - 1].Place += rolled;//advance the player relatively to his throw
+            
+            if (pregameLogic.playerData[turn - 1].Place > 100)
+            {
+                pregameLogic.playerData[turn - 1].Place = 100 - (pregameLogic.playerData[turn - 1].Place - 100);    //if the player's roll surpass 100 he'll go back the amount he went over
+                pregameLogic.playerData[turn - 1].Place = pregameLogic.playerData[turn - 1].Place;
+            }
             else if (pregameLogic.playerData[turn - 1].Place == 100)   //if the player land on 100 he wins
             {
                 MessageBox.Show($"player {turn}. {pregameLogic.playerData[turn - 1].Name} won");
-                Celebration celebration = new Celebration(pregameLogic.playerData,pregameLogic.players);
+                Celebration celebration = new Celebration(pregameLogic.playerData, pregameLogic.players);
                 this.Close();   // close current window
                 celebration.Show();   // goes to celebration screen
-                
             }
-               //we can use both "playerData" and "turn" to use the data of the player currently rolling. since "turn" resets at 1 and list start from 0 we'll need to subtrack 1 from turn to have perfect connection
-            int Row =    //every row is 10 spaces, every row is from column 1-10
-                 pregameLogic.playerData[turn - 1].Place % 10 != 0 ? 1 + pregameLogic.playerData[turn - 1].Place / 10    //example: player on place 8-> 8/10=0 but we start our column from 1 therefore we'll add 1 to match our board-> 1+8/10=1+0-> row=1
-               : pregameLogic.playerData[turn - 1].Place / 10;   //example: player land on 10-> 10/10=1, since every row is 10 spaces, in this case, it will be wrong to add 1-> 10/10=1 -> row=1
+            int nextPlace = pregameLogic.playerData[turn - 1].Place;
+            
+            currentRow =    //every row is 10 spaces, every row is from column 1-10
+                 currentPlace == 0 ? 1
+               : currentPlace % 10 != 0 ? 1 + currentPlace / 10    //example: player on place 8-> 8/10=0 but we start our column from 1 therefore we'll add 1 to match our board-> 1+8/10=1+0-> row=1
+               : currentPlace / 10;   //example: player land on 10-> 10/10=1, since every row is 10 spaces, in this case, it will be wrong to add 1-> 10/10=1 -> row=1
 
-            int Colom =   //every column is 10 spaces, every colomn is from row 1-10, every 2nd row the direction is changed-> example:1st row goes left to right, 2nd row goes from right to left 
-                Row % 2 != 0 && pregameLogic.playerData[turn - 1].Place % 10 == 0 ? 10   //example:10-> 10's row is 1 using the row's formula, 1%2!=0 and 10%10=0 -> column is set to 10
-              : Row % 2 == 0 && pregameLogic.playerData[turn - 1].Place % 10 == 0 ? 1   //example:20-> 20's row is 2, 2%2=0 and 20%10=0 -> column is set to 1
-              : Row % 2 == 0 && pregameLogic.playerData[turn - 1].Place % 10 != 0 ? 11 - (pregameLogic.playerData[turn - 1].Place % 10)   //example:11-> 11's row is 2, 2%2=0 and 11%10=1 -> since every 2nd row the path is from right to left we'll count from the right ->11-(11%10)=11-1-> column=10    
-              : pregameLogic.playerData[turn - 1].Place % 10;   //example:1-> 1's row is 1, 1%2!=0 and 1%10=1 -> column=1
+            //we can use both "playerData" and "turn" to use the data of the player currently rolling. since "turn" resets at 1 and list start from 0 we'll need to subtrack 1 from turn to have perfect connection
+            futureRow =    //every row is 10 spaces, every row is from column 1-10
+                 nextPlace % 10 != 0 ? 1 + nextPlace / 10    //example: player on place 8-> 8/10=0 but we start our column from 1 therefore we'll add 1 to match our board-> 1+8/10=1+0-> row=1
+               : nextPlace / 10;   //example: player land on 10-> 10/10=1, since every row is 10 spaces, in this case, it will be wrong to add 1-> 10/10=1 -> row=1
 
+
+            currentColumn =   //every column is 10 spaces, every colomn is from row 1-10, every 2nd row the direction is changed-> example:1st row goes left to right, 2nd row goes from right to left 
+                currentPlace == 0 ? 0
+              : currentRow % 2 != 0 && currentPlace % 10 == 0 ? 10   //example:10-> 10's row is 1 using the row's formula, 1%2!=0 and 10%10=0 -> column is set to 10
+              : currentRow % 2 == 0 && currentPlace % 10 == 0 ? 1   //example:20-> 20's row is 2, 2%2=0 and 20%10=0 -> column is set to 1
+              : currentRow % 2 == 0 && currentPlace % 10 != 0 ? 11 - (currentPlace % 10)   //example:11-> 11's row is 2, 2%2=0 and 11%10=1 -> since every 2nd row the path is from right to left we'll count from the right ->11-(11%10)=11-1-> column=10    
+              : currentPlace % 10;   //example:1-> 1's row is 1, 1%2!=0 and 1%10=1 -> column=1
+
+
+            futureColumn =   //every column is 10 spaces, every colomn is from row 1-10, every 2nd row the direction is changed-> example:1st row goes left to right, 2nd row goes from right to left 
+                futureRow % 2 != 0 && nextPlace % 10 == 0 ? 10   //example:10-> 10's row is 1 using the row's formula, 1%2!=0 and 10%10=0 -> column is set to 10
+              : futureRow % 2 == 0 && nextPlace % 10 == 0 ? 1   //example:20-> 20's row is 2, 2%2=0 and 20%10=0 -> column is set to 1
+              : futureRow % 2 == 0 && nextPlace % 10 != 0 ? 11 - (nextPlace % 10)   //example:11-> 11's row is 2, 2%2=0 and 11%10=1 -> since every 2nd row the path is from right to left we'll count from the right ->11-(11%10)=11-1-> column=10    
+              : nextPlace % 10;   //example:1-> 1's row is 1, 1%2!=0 and 1%10=1 -> column=1
+
+
+            ColumnRowAnimation(sender, e);   //call the animation
+            
+            /*
             int total = 0;   //count the total spaces player gained/lost cause of bombs/rockets
             bool bom = false;   //if player land on bomb raise flag
             bool boos = false;   //if player land on rocket raise flag
@@ -78,7 +116,7 @@ namespace SnakeLadder
             {
                 falg = false;
                 List<int> boost = new List<int>() { 4, 23, 29, 44, 63, 71 };   //places of every rocket on the board
-                foreach (int placeBoost in boost) if (placeBoost == pregameLogic.playerData[turn - 1].Place)
+                foreach (int placeBoost in boost) if (placeBoost == futurePlace)
                     {
                            //if player land on rocket show the character  on the rocket before moving him
                         GridPP.Children.Remove(pregameLogic.playerData[turn - 1].TextBlock);
@@ -89,7 +127,9 @@ namespace SnakeLadder
                         MessageBox.Show($"Player {turn} hit rocket");
                         boot = random.Next(1, 7);   //landing on rocket makes you gain randomly between 1-6 spaces
                         total += boot;
+                        currentPlace = futurePlace;
                         pregameLogic.playerData[turn - 1].Place += boot;
+                        futurePlace = pregameLogic.playerData[turn - 1].Place;
                         falg = true;
                         bom = true;
                     }
@@ -104,35 +144,109 @@ namespace SnakeLadder
                         MessageBox.Show($"Player {turn} hit bomb");
                         boot = random.Next(1, 13);   //landing on bomb makes you lose randomly between 1-12 spaces
                         total -= boot;
+                        currentPlace = futurePlace;
                         pregameLogic.playerData[turn - 1].Place -= boot;
+                        futurePlace = pregameLogic.playerData[turn - 1].Place;
                         falg = true;
                         boos = true;
                     }
                    //in case the bomb/rocket cuased a change of row/column check their value again
-                Row = pregameLogic.playerData[turn - 1].Place % 10 != 0 ? 1 + pregameLogic.playerData[turn - 1].Place / 10 : pregameLogic.playerData[turn - 1].Place / 10;
-                Colom = Row % 2 != 0 && pregameLogic.playerData[turn - 1].Place % 10 == 0 ? 10 : Row % 2 == 0 && pregameLogic.playerData[turn - 1].Place % 10 == 0 ? 1 : Row % 2 == 0 && pregameLogic.playerData[turn - 1].Place % 10 != 0 ? 11 - (pregameLogic.playerData[turn - 1].Place % 10) : pregameLogic.playerData[turn - 1].Place % 10;
+                row = futurePlace % 10 != 0 ? 1 + futurePlace / 10 : futurePlace / 10;
+                column = row % 2 != 0 && futurePlace % 10 == 0 ? 10 : row % 2 == 0 && futurePlace % 10 == 0 ? 1 : row % 2 == 0 && futurePlace % 10 != 0 ? 11 - (futurePlace % 10) : futurePlace % 10;
 
             } while (falg);   //falg raised mean the player land on bomb/rocket and now he's in difference place, therefore we'll need to check if the player land on another bomb/rocket 
 
                //give the player relative message about how much he gain/lost from landing on bombs/rockets
             if (total > 0)
-                message1.Text = boos && bom ? $"Player {turn} hit bombs\nand boosts. in total\ngain {total} steps" :
-                                              $"Player {turn} hit boosts.\n in total gain {total} steps";
+                message1.Text = boos && bom ? $"Player {turn} hit bombs and boosts. in total gain {total} steps" :
+                                              $"Player {turn} hit boosts. in total gain {total} steps";
             else if (total < 0)
-                message1.Text = boos && bom ? $"Player {turn} hit bombs\nand boosts. in total\nlose {Math.Abs(total)} steps" :
-                                              $"Player {turn} hit bombs.\n in total lose {Math.Abs(total)} steps";
+                message1.Text = boos && bom ? $"Player {turn} hit bombs and boosts. in total lose {Math.Abs(total)} steps" :
+                                              $"Player {turn} hit bombs. in total lose {Math.Abs(total)} steps";
             else
-                message1.Text = boos && bom ? $"Player {turn} hit bombs\nand boosts. but stayed\nin his space" :
+                message1.Text = boos && bom ? $"Player {turn} hit bombs and boosts. but stayed in his space" :
                                                "";
             
             GridPP.Children.Remove(pregameLogic.playerData[turn - 1].TextBlock);
             Grid.SetRow(pregameLogic.playerData[turn - 1].TextBlock, Row);
             Grid.SetColumn(pregameLogic.playerData[turn - 1].TextBlock, Colom);
             GridPP.Children.Add(pregameLogic.playerData[turn - 1].TextBlock);
+            */
+
+        }
+
+
+
+        public void ColumnRowAnimation(object sender, EventArgs e)
+        {
+            
+            Dice.IsEnabled = false;
+
+            if (currentRow == futureRow) //same row
+            {
+                Int32Animation columnMove = new Int32Animation
+                {
+                    From = currentColumn,
+                    To = futureColumn,
+                    Duration = TimeSpan.FromMilliseconds(250)
+                };
+                columnMove.Completed += next_turn;
+                pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, columnMove);
+            }
+
+            else  //difference rows
+            {
+                if (currentRow % 2 == 1)//direction from left to right
+                {
+                    Int32Animation columnMoveL2R = new Int32Animation
+                    {
+                        From = currentColumn,
+                        To = 10,
+                        Duration = TimeSpan.FromMilliseconds(250)
+                    };
+                    columnMoveL2R.Completed += ColumnMove_Completed;
+                    currentColumn = (int)columnMoveL2R.To;
+                    pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, columnMoveL2R);
+                    
+                }
+                else//direction from right to left
+                {
+                    Int32Animation columnMoveR2L = new Int32Animation
+                    {
+                        From = currentColumn,
+                        To = 1,
+                        Duration = TimeSpan.FromMilliseconds(250)
+                    };
+                    columnMoveR2L.Completed += ColumnMove_Completed;
+                    currentColumn = (int)columnMoveR2L.To;
+                    pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, columnMoveR2L);
+                    
+                }
+            }
+        }
+
+        private void next_turn(object sender, EventArgs e)
+        {
+            Dice.IsEnabled = true;
             turn = turn == pregameLogic.players ? 1    //if it's the last player's turn then next turn returned to the first player-> 3 players, it's player 3's turn, next turn will be player 1
-                : turn + 1;   //else it's the next player turn-> 3 players, it's player 2's turn, next turn will be player 3
+    : turn + 1;   //else it's the next player turn -> 3 players, it's player 2's turn, next turn will be player 3
             its.Text = $"Player {turn}'s turn";
         }
+
+        private void ColumnMove_Completed(object sender, EventArgs e)
+        {
+            Int32Animation rowMove = new Int32Animation
+            {
+                From = currentRow,
+                To = currentRow+1,
+                Duration = TimeSpan.FromMilliseconds(100)
+            };
+            currentRow++;
+            rowMove.Completed += ColumnRowAnimation;
+            pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.RowProperty, rowMove);
+
+        }
+
 
         private void dikk(int roll)   //showing suitable picture according to the player's roll
         {
