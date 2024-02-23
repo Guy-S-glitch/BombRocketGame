@@ -25,18 +25,18 @@ namespace SnakeLadder
         PreGame pregameLogic = new PreGame();
 
         
-        private int turn = 1;   //keep tracks of who's turn is it 
-        private static int boot;    //used to contain the random amount of spaces the rocket/bomb send you
+        private static int turn = 1;   //keep tracks of who's turn is it 
+        private static int randomRocketBomb;    //used to contain the random amount of spaces the rocket/bomb send you
         
-        private int currentRow=1, futureRow, currentColumn=0, futureColumn;
+        private static int currentRow, futureRow, currentColumn, futureColumn;
         private void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            pregameLogic.How_much_SelectionChanged(sender, e, ref How_much, ref here, ref sele, ref info);
+            pregameLogic.How_much_SelectionChanged(sender, e, ref How_much, ref keep_data, ref select_players, ref info);
         }
 
         private void info_Click(object sender, RoutedEventArgs e)
         {
-            pregameLogic.info_Click(sender,e, ref info,ref  here, ref Dice, ref its);
+            pregameLogic.info_Click(sender,e, ref info,ref keep_data, ref Dice, ref turn_text);
             int initial = 0;
             foreach (Player iniplayer in pregameLogic.playerData)
             {
@@ -48,9 +48,8 @@ namespace SnakeLadder
             }
             
         }
-        private Random random = new Random();
-        private int currentPlace;
-        private int nextPlace;
+        private static Random random = new Random();
+        private static int currentPlace, nextPlace;
         public menu()
         {
             InitializeComponent();
@@ -58,10 +57,12 @@ namespace SnakeLadder
             How_much.SelectedIndex = 0;
             this.KeyDown += MainWindow_KeyDown;   //access responsive key game
         }
-        private bool TooMuch = false;
+        private static bool TooMuch = false;   //flag raised to determain if the player surpass 100 and call relative animation
         private void Dice_Click(object sender, RoutedEventArgs e)
         {
-            message1.Text = "";
+
+
+            Bomb_rocket_text.Text = "";
             int rolled = random.Next(1, 7);   //present a cube throw
             dikk(rolled);   //the random number showed to the player
             currentPlace = pregameLogic.playerData[turn - 1].Place;
@@ -71,7 +72,6 @@ namespace SnakeLadder
             {
                 TooMuch = true;
                 pregameLogic.playerData[turn - 1].Place = 100 - (pregameLogic.playerData[turn - 1].Place - 100);    //if the player's roll surpass 100 he'll go back the amount he went over
-                pregameLogic.playerData[turn - 1].Place = pregameLogic.playerData[turn - 1].Place;
             }
             else if (pregameLogic.playerData[turn - 1].Place == 100)   //if the player land on 100 he wins
             {
@@ -81,41 +81,50 @@ namespace SnakeLadder
                 celebration.Show();   // goes to celebration screen
             }
             nextPlace = pregameLogic.playerData[turn - 1].Place;
-            
+
+            List<int> RowColumnInfo=gridInfo();   //contains where every player needs to go according to the roll
+            currentRow = RowColumnInfo[0];
+            futureRow = RowColumnInfo[1];
+            currentColumn = RowColumnInfo[2];
+            futureColumn = RowColumnInfo[3];
+
+            ColumnRowAnimation(sender, e);   //call the animation
+        }
+        private List<int> gridInfo()
+        {
+            int currentRow, futureRow, currentColumn, futureColumn;
             currentRow =    //every row is 10 spaces, every row is from column 1-10
-                 currentPlace == 0 ? 1
+                 currentPlace == 0 ? 1    //at the start the current place is 0 and the row of 0 is 1
                : currentPlace % 10 != 0 ? 1 + currentPlace / 10    //example: player on place 8-> 8/10=0 but we start our column from 1 therefore we'll add 1 to match our board-> 1+8/10=1+0-> row=1
                : currentPlace / 10;   //example: player land on 10-> 10/10=1, since every row is 10 spaces, in this case, it will be wrong to add 1-> 10/10=1 -> row=1
 
-           futureRow =    
-                nextPlace % 10 != 0 ? 1 + nextPlace / 10
-                : nextPlace / 10; 
+            futureRow =
+                 nextPlace % 10 != 0 ? 1 + nextPlace / 10
+                 : nextPlace / 10;
 
 
             currentColumn =   //every column is 10 spaces, every colomn is from row 1-10, every 2nd row the direction is changed-> example:1st row goes left to right, 2nd row goes from right to left 
-                currentPlace == 0 ? 0
+                currentPlace == 0 ? 0   //at the start the current place is 0 and the column of 0 is 0
               : currentRow % 2 != 0 && currentPlace % 10 == 0 ? 10   //example:10-> 10's row is 1 using the row's formula, 1%2!=0 and 10%10=0 -> column is set to 10
               : currentRow % 2 == 0 && currentPlace % 10 == 0 ? 1   //example:20-> 20's row is 2, 2%2=0 and 20%10=0 -> column is set to 1
               : currentRow % 2 == 0 && currentPlace % 10 != 0 ? 11 - (currentPlace % 10)   //example:11-> 11's row is 2, 2%2=0 and 11%10=1 -> since every 2nd row the path is from right to left we'll count from the right ->11-(11%10)=11-1-> column=10    
               : currentPlace % 10;   //example:1-> 1's row is 1, 1%2!=0 and 1%10=1 -> column=1
 
 
-            futureColumn =   
-                futureRow % 2 != 0 && nextPlace % 10 == 0 ? 10   
-                : futureRow % 2 == 0 && nextPlace % 10 == 0 ? 1   
-                : futureRow % 2 == 0 && nextPlace % 10 != 0 ? 11 - (nextPlace % 10)   
-                : nextPlace % 10;   
-
-
-            ColumnRowAnimation(sender, e);   //call the animation
+            futureColumn =
+                futureRow % 2 != 0 && nextPlace % 10 == 0 ? 10
+                : futureRow % 2 == 0 && nextPlace % 10 == 0 ? 1
+                : futureRow % 2 == 0 && nextPlace % 10 != 0 ? 11 - (nextPlace % 10)
+                : nextPlace % 10;
+           
+            return new List<int> { currentRow, futureRow, currentColumn, futureColumn };
         }
-
 
 
         public void ColumnRowAnimation(object sender, EventArgs e)
         {
             
-            Dice.IsEnabled = false;
+            Dice.IsEnabled = false;   //while the animation running the dice button isn't available
 
             if (currentRow == futureRow && !TooMuch) //same row
             {
@@ -125,11 +134,11 @@ namespace SnakeLadder
                     To = futureColumn,
                     Duration = TimeSpan.FromMilliseconds(450)
                 };
-                columnMove.Completed += Bomboclat;
+                columnMove.Completed += CheckForExtas;   //after player got to ouhisr final place check if he land on a bomb/rocket
 
                 pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, columnMove);
             }
-            else if (TooMuch)
+            else if (TooMuch)   //animation for ricocheting 100 if went over
             {
                 Int32Animation MoveTo100 = new Int32Animation
                 {
@@ -139,21 +148,21 @@ namespace SnakeLadder
                 };
                 TooMuch = false;
                 currentColumn = (int)MoveTo100.To;
-                MoveTo100.Completed += ColumnRowAnimation;
+                MoveTo100.Completed += ColumnRowAnimation;    //after touching 100 go to your actual place
                 pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, MoveTo100);
             }
-            else if(!bombFlag) //difference rows
+            else if(!bombFlag) //difference rows and direction is positive toward the finish
             {
                 if (currentRow % 2 == 1)//direction from left to right
                 {
                     Int32Animation columnMoveL2R = new Int32Animation
                     {
                         From = currentColumn,
-                        To = 10,
+                        To = 10,  
                         Duration = TimeSpan.FromMilliseconds(450)
                     };
                     columnMoveL2R.Completed += ColumnMove_Completed;
-                    currentColumn = (int)columnMoveL2R.To;
+                    currentColumn = (int)columnMoveL2R.To;   
                     pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, columnMoveL2R);
                     
                 }
@@ -171,9 +180,9 @@ namespace SnakeLadder
                     
                 }
             }
-            else
+            else     //direction is negative away from the finish
             {
-                if (currentRow % 2 == 0)//direction from left to right
+                if (currentRow % 2 == 0)//direction from right to left
                 {
                     Int32Animation columnMoveL2R = new Int32Animation
                     {
@@ -186,7 +195,7 @@ namespace SnakeLadder
                     pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, columnMoveL2R);
 
                 }
-                else//direction from right to left
+                else//direction from left to right
                 {
                     Int32Animation columnMoveR2L = new Int32Animation
                     {
@@ -202,7 +211,7 @@ namespace SnakeLadder
             }
         }
         private bool bombFlag = false;   //if player land on bomb raise flag
-        private void Bomboclat(object sender, EventArgs e)
+        private void CheckForExtas(object sender, EventArgs e)
         {
             int total = 0;   //count the total spaces player gained/lost cause of bombs/rockets
             bool boostFlag = false;   //if player land on rocket raise flag
@@ -213,10 +222,10 @@ namespace SnakeLadder
                 {
                     //if player land on rocket show the character  on the rocket before moving him
                     Thread.Sleep(300);
-                    boot = random.Next(1, 7);   //landing on rocket makes you gain randomly between 1-6 spaces
-                    total += boot;
+                    randomRocketBomb = random.Next(1, 7);   //landing on rocket makes you gain randomly between 1-6 spaces
+                    total += randomRocketBomb;
                     currentPlace = pregameLogic.playerData[turn - 1].Place;
-                    pregameLogic.playerData[turn - 1].Place += boot;
+                    pregameLogic.playerData[turn - 1].Place += randomRocketBomb;
                     nextPlace = pregameLogic.playerData[turn - 1].Place;
                     falg = true;
                     boostFlag = true;
@@ -229,26 +238,27 @@ namespace SnakeLadder
                 {
                     //if player land on bomb show the character  on the bomb before moving him
 
-                    boot = random.Next(1, 13);   //landing on bomb makes you lose randomly between 1-12 spaces
-                    total -= boot;
+                    randomRocketBomb = random.Next(1, 13);   //landing on bomb makes you lose randomly between 1-12 spaces
+                    total -= randomRocketBomb;
                     currentPlace = pregameLogic.playerData[turn - 1].Place;
-                    pregameLogic.playerData[turn - 1].Place -= boot;
+                    pregameLogic.playerData[turn - 1].Place -= randomRocketBomb;
                     nextPlace = pregameLogic.playerData[turn - 1].Place;
                     falg = true;
                     bombFlag = true;
                     break;
                 }
-            
+
 
             //give the player relative message about how much he gain/lost from landing on bombs/rockets
-            message1.Text = bombFlag ? $"Player {turn} hit bombs. in total lose {Math.Abs(total)} steps"
-                : boostFlag ? $"Player {turn} hit boosts. in total gain {total} steps":message1.Text;
+            Bomb_rocket_text.Text = bombFlag ? $"Player {turn} hit bombs. in total lose {Math.Abs(total)} steps"
+                : boostFlag ? $"Player {turn} hit boosts. in total gain {total} steps": Bomb_rocket_text.Text;
             if (falg)//falg raised mean the player land on bomb/rocket and now he's in difference place, therefore we'll need to check if the player land on another bomb/rocket 
             {
-                currentRow = currentPlace == 0 ? 1 : currentPlace % 10 != 0 ? 1 + currentPlace / 10 : currentPlace / 10;
-                futureRow = nextPlace % 10 != 0 ? 1 + nextPlace / 10 : nextPlace / 10;
-                currentColumn = currentPlace == 0 ? 0 : currentRow % 2 != 0 && currentPlace % 10 == 0 ? 10 : currentRow % 2 == 0 && currentPlace % 10 == 0 ? 1 : currentRow % 2 == 0 && currentPlace % 10 != 0 ? 11 - (currentPlace % 10) : currentPlace % 10;
-                futureColumn = futureRow % 2 != 0 && nextPlace % 10 == 0 ? 10 : futureRow % 2 == 0 && nextPlace % 10 == 0 ? 1 : futureRow % 2 == 0 && nextPlace % 10 != 0 ? 11 - (nextPlace % 10) : nextPlace % 10;
+                List<int> RowColumnInfo = gridInfo();
+                currentRow = RowColumnInfo[0];
+                futureRow = RowColumnInfo[1];
+                currentColumn = RowColumnInfo[2];
+                futureColumn = RowColumnInfo[3];
                 ColumnRowAnimation(sender, e);
             }
             else next_turn(sender, e);
@@ -259,7 +269,7 @@ namespace SnakeLadder
             Dice.IsEnabled = true;
             turn = turn == pregameLogic.players ? 1    //if it's the last player's turn then next turn returned to the first player-> 3 players, it's player 3's turn, next turn will be player 1
     : turn + 1;   //else it's the next player turn -> 3 players, it's player 2's turn, next turn will be player 3
-            its.Text = $"Player {turn}'s turn";
+            turn_text.Text = $"Player {turn}'s turn";
         }
 
         private void ColumnMove_Completed(object sender, EventArgs e)

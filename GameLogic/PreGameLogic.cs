@@ -14,7 +14,7 @@ namespace gameLogic
         public List<string> strings = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };   //after failing to get the character  directly from the window the best option is to get the index of the chosen character  and compare it with list that will have the same values
         public List<Player> playerData = new List<Player>();      //keeps the data about every player
         public int players;
-        public void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e,ref ComboBox How_much,ref ListBox here,ref StackPanel sele,ref Button info)
+        public void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e,ref ComboBox How_much,ref ListBox keep_data, ref StackPanel select_players, ref Button info)
         {
             if (How_much.SelectedIndex != 0)   //the only way to set how many player are there is to choose item with number value
             {
@@ -22,7 +22,7 @@ namespace gameLogic
                 How_much.IsEnabled = false;   //after the amount of players has chosen this combobox is unrelevent
                 //lablePlayers.Content = $"{players} players chosen";
                 for (int i = 0; i < players; i++) playerData.Add(new Player(i + 1, 0, new TextBlock()));   //initialize the stats of evert player
-                here.ItemsSource = playerData;   //after we filled the needed stats we'll send the information to a listbox that will ask the players for the remaining needed information
+                keep_data.ItemsSource = playerData;   //after we filled the needed stats we'll send the information to a listbox that will ask the players for the remaining needed information
                 
                 int left = 0;
                 int bottom = 0;
@@ -38,15 +38,15 @@ namespace gameLogic
                     //minimum width of the screen will have to be: 150+(10*minimumWidthOfOneBlock)+150>width -> minimumWidthOfOneBlock=3*25=75 -> 150+(10*75)+150= 1050 = minimum width
                 }
                 How_much.Visibility = Visibility.Hidden;
-                sele.Visibility = Visibility.Hidden;
+                select_players.Visibility = Visibility.Hidden;
 
                 //after selecting how many playing now we need to know information on each player
                 info.Visibility = Visibility.Visible;
-                here.Visibility = Visibility.Visible;
+                keep_data.Visibility = Visibility.Visible;
 
             }
         }
-        public void info_Click(object sender, RoutedEventArgs e, ref Button info, ref ListBox here, ref Button Dice, ref TextBlock its)
+        public void info_Click(object sender, RoutedEventArgs e, ref Button info, ref ListBox keep_data, ref Button Dice, ref TextBlock turn_text)
         { 
             
             try   //there will be an error if the player will send null info, thus we'll use try & catch
@@ -60,10 +60,10 @@ namespace gameLogic
                 }
                 //after reciving the needed info these boxes isn't necessary
                 info.Visibility = Visibility.Hidden;
-                here.Visibility = Visibility.Hidden;
+                keep_data.Visibility = Visibility.Hidden;
 
                 Dice.IsEnabled = true;   //make the dice clickable
-                its.Text = "Player 1's turn";   //since it's the start, it's player 1's turn
+                turn_text.Text = "Player 1's turn";   //since it's the start, it's player 1's turn
             }
             catch
             {

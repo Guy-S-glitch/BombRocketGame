@@ -41,7 +41,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
-        <StackPanel x:Name="sele" Grid.Column="3" Grid.ColumnSpan="6" Panel.ZIndex="4"  Grid.Row="3" Grid.RowSpan="6">
+        <StackPanel x:Name="select_players" Grid.Column="3" Grid.ColumnSpan="6" Panel.ZIndex="4"  Grid.Row="3" Grid.RowSpan="6">
             <StackPanel.Background>
                 <RadialGradientBrush>
                     <GradientStop Color="#FF6C3C67" Offset="0.802"/>
@@ -61,7 +61,7 @@
             </ComboBox>
         </StackPanel>
         <Button x:Name="info" Visibility="Hidden" Click="info_Click" Grid.Column="3" Grid.ColumnSpan="6" VerticalAlignment="Bottom" Content="Save and Play" FontSize="30" Panel.ZIndex="4" Grid.Row="3"/>
-        <ListBox x:Name="here" Visibility="Hidden" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="6" Grid.RowSpan="4" Panel.ZIndex="4">
+        <ListBox x:Name="keep_data" Visibility="Hidden" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="6" Grid.RowSpan="4" Panel.ZIndex="4">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -87,9 +87,9 @@
                 </StackPanel>
             </Button>
 
-            <TextBlock x:Name="message1" Grid.Row="6" TextWrapping="WrapWithOverflow" FontSize="14" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" />
+            <TextBlock x:Name="Bomb_rocket_text" Grid.Row="6" TextWrapping="WrapWithOverflow" FontSize="14" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" />
 
-            <TextBlock x:Name="its" Margin="0,50" TextWrapping="WrapWithOverflow" FontSize="30"/>
+            <TextBlock x:Name="turn_text" Margin="0,50" TextWrapping="WrapWithOverflow" FontSize="30"/>
         </StackPanel>
         <Button x:Name="back" Grid.Row="9" Grid.Column="11" Content="🏠" FontSize="30" Click="back_Click">
 
