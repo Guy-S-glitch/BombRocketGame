@@ -12,7 +12,7 @@ namespace GameLogic
 {
     public class Decoration
     {
-        public void dikk(ref int roll,ref Image Imagin)   //showing suitable picture according to the player's roll
+        public void DiceOutput(ref int roll,ref Image Imagin)   //showing suitable picture according to the player's roll
         {
             switch (roll)
             {

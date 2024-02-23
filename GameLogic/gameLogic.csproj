@@ -44,6 +44,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimationLogic.cs" />
     <Compile Include="DecorationLogic.cs" />
     <Compile Include="PreGameLogic.cs" />
     <Compile Include="Models\Player.cs" />

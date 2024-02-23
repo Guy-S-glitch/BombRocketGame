@@ -82,7 +82,7 @@
 
             <Button x:Name="Dice" Click="Dice_Click" IsEnabled="False" >
                 <StackPanel >
-                    <Label Content="Roll Dice"></Label>
+                    <Label x:Name="RollOrWait" FontSize="22" FontWeight="Bold"></Label>
                     <Image x:Name="Imagin"  Source="images\DicePhoto.png"/>
                 </StackPanel>
             </Button>

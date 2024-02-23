@@ -67,12 +67,15 @@
                 </LinearGradientBrush>
             </StackPanel.Background>
             <Button Content="↩     Go back to menu" x:Name="toMen" Click="toMen_Click" HorizontalContentAlignment="Left" Background="#FF807B7B" FontSize="22"/>
-            <Label Content="Rules" Foreground="Gold"  HorizontalAlignment="Center" Margin="0,5" FontSize="22"/>
-            <Label Content="💣 Lose 1-12 spaces" Foreground="Red" FontSize="22"/>
-            <Label Content="🚀 Gain 1-6 spaces" Foreground="LightGreen" FontSize="22"/>
-            <Label Content="🛬 First to land on 100 wins" Foreground="#FF5800FF" FontSize="22"/>
-            <Label Content="❌ Press Esc to exit" Foreground="#FF8A2727" FontSize="22"/>
-            <Label Content="🏠 Press Home to go to menu" Foreground="#FF04D65A" FontSize="22"/>
+            <Label Content="Rules" Foreground="Red"  HorizontalAlignment="Center" Margin="0,5" FontSize="22"/>
+            <Label Content="💣 Lose 1-12 spaces" Foreground="#FFE01F00" FontSize="22"/>
+            <Label Content="🚀 Gain 1-6 spaces" Foreground="#FFAAC13E" FontSize="22"/>
+            <Label Content="🛬 First to land on 100 wins" Foreground="#FFA25D00" FontSize="22"/>
+            <Label Content="Press Esc or Click the ❌ button to exit" Foreground="#FF837C00" FontSize="22"/>
+            <Label Content="Press Home or Click the 🏠 button to go to menu" Foreground="#FF649B00" FontSize="22"/>
+            <Label Content="Press Tab or Click the 🎲 image to roll" Foreground="#FF45BA00" FontSize="22"/>
+            <Label Content="✋ wait for the animation to stop to roll again" Foreground="#FF26D900" FontSize="22"/>
+            
         </StackPanel>
     </Grid>
 </Window>
