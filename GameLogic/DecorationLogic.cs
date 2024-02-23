@@ -7,6 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Collections;
+using System.Reflection.Emit;
 
 namespace GameLogic
 {
@@ -65,5 +67,17 @@ namespace GameLogic
                 GridPP.Children.Add(label);
             }
         }
+
+        //private void populateLabel(....)
+        //{
+        //    label.BorderThickness = new Thickness(1);
+        //    label.BorderBrush = myLinearGradientBrush;   //paint the border with the colors we set
+
+        //    label.Content = start;   //every space will have it's own number
+        //    label.FontSize = 18;
+        //    label.HorizontalContentAlignment = HorizontalAlignment.Left;
+        //    label.VerticalContentAlignment = VerticalAlignment.Top;
+        //    label.Foreground = new SolidColorBrush(Colors.GhostWhite);
+        //}
     }
 }

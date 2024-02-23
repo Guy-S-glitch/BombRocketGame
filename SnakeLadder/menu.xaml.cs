@@ -24,7 +24,12 @@ namespace SnakeLadder
         Decoration decoration = new Decoration();
         PreGame pregameLogic = new PreGame();
         //AnimationLogic animationLogic = new AnimationLogic();
-        
+
+        string exitMessage = "Are you sure you  want to exit\", \"Conform Exit";
+        string entryMessage = "Are you sure you  want to exit\", \"Conform Exit";
+        string sfdfsdMessage = "Are you sure you  want to exit\", \"Conform Exit";
+        string sdfMessage = "Are you sure you  want to exit\", \"Conform Exit";
+
         private static int turn = 1;   //keep tracks of who's turn is it 
         private static int randomRocketBomb;    //used to contain the random amount of spaces the rocket/bomb send you
         
@@ -225,6 +230,8 @@ namespace SnakeLadder
                 }
             }
         }
+
+
         private bool bombFlag = false;   //if player land on bomb raise flag
         private void CheckForExtas(object sender, EventArgs e)
         {
@@ -351,8 +358,7 @@ namespace SnakeLadder
             ExitConform();
         }
         private void ExitConform()
-        {
-            object var = MessageBox.Show("Are you sure you  want to exit", "Conform Exit", MessageBoxButton.YesNo);
+        {            object var = MessageBox.Show(exitMessage, "Conform Exit", MessageBoxButton.YesNo);
             switch (var)
             {
                 case MessageBoxResult.Yes:
