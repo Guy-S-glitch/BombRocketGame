@@ -12,5 +12,4 @@ Screen size of at least 1050x520
             <li> 🛬 First to land on 100 wins</li>
             <li> ❌ Press Esc to exit </li>
             <li> 🏠 Press Home to go to menu </li>
-            <li> 🗣️ Press Space to skip dialog </li>
 </ul>
