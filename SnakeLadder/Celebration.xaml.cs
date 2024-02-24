@@ -84,23 +84,23 @@ namespace SnakeLadder
             switch (e.Key)
             {
                 case Key.Escape:   //if player press esc ask him if he's sure he want to exit the game
-                    ExitConform();
+                    ExitConfirm();
                     break;
                 case Key.Home:   //if player press home ask him if he's sure he want to return to the menu
-                    HomeConform();
+                    HomeConfirm();
                     break;
                 default: break;
             }
         }
         private void back_Click(object sender, RoutedEventArgs e)   //if player press menu button return to the menu 
         {
-            HomeConform();
+            HomeConfirm();
         }
         private void exit_Click(object sender, RoutedEventArgs e)   //if player press the exit button exit the game
         {
-            ExitConform();
+            ExitConfirm();
         }
-        private void ExitConform()
+        private void ExitConfirm()
         {
             object var = MessageBox.Show("Are you sure you  want to exit", "Conform Exit", MessageBoxButton.YesNo);
             switch (var)
@@ -115,7 +115,7 @@ namespace SnakeLadder
 
             }
         }
-        private void HomeConform()
+        private void HomeConfirm()
         {
             object var = MessageBox.Show("Are you sure you  want to return to the menu", "Conform Menu", MessageBoxButton.YesNo);
             switch (var)

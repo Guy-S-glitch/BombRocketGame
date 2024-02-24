@@ -11,8 +11,8 @@ namespace GameLogic.Models
     public class Player
     {
 
-        public List<string> charara = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };
-        public List<string> charactersHere { get { return charara; } }
+        private List<string> _charactesList = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };
+        public List<string> charactersHere { get { return _charactesList; } }
         public int Id { get; set; }
         public bool trash { get; set; }
         public string Name { get; set; }   //contain player's name
