@@ -23,7 +23,6 @@ namespace SnakeLadder
     {
         Decoration decoration = new Decoration();
         PreGame pregameLogic = new PreGame();
-        //AnimationLogic animationLogic = new AnimationLogic();
         
         private static int turn = 1;   //keep tracks of who's turn is it 
         private static int randomRocketBomb;    //used to contain the random amount of spaces the rocket/bomb send you
@@ -127,7 +126,7 @@ namespace SnakeLadder
         }
         private void ColumnRowAnimation(object sender, EventArgs e)
         {
-            //animationLogic.ColumnRowAnimationData(ref Dice, ref currentRow, ref futureRow, ref currentColumn, ref futureColumn, ref TooMuch, ref turn, ref bombFlag);
+           
             Dice.IsEnabled = false;   //while the animation running the dice button isn't available
             if (winner)    //player land on the 100 space
             {
@@ -137,8 +136,8 @@ namespace SnakeLadder
                     To = futureColumn,
                     Duration = TimeSpan.FromMilliseconds(350)
                 };
-                columnMove.Completed += Winner;   
-
+                columnMove.Completed += Winner;
+                winner = false;
                 pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, columnMove);
             }
             else if (currentRow == futureRow && !TooMuch) //same row
