@@ -49,10 +49,10 @@ namespace SnakeLadder
             short setPlayersAt0 = 0;
             foreach (Player irrelevant in pregameLogic.playerData)
             {
-                GridPP.Children.Remove(pregameLogic.playerData[setPlayersAt0].TextBlock);
+                Game_Grid.Children.Remove(pregameLogic.playerData[setPlayersAt0].TextBlock);
                 Grid.SetRow(pregameLogic.playerData[setPlayersAt0].TextBlock, 1);
                 Grid.SetColumn(pregameLogic.playerData[setPlayersAt0].TextBlock, 0);
-                GridPP.Children.Add(pregameLogic.playerData[setPlayersAt0].TextBlock);
+                Game_Grid.Children.Add(pregameLogic.playerData[setPlayersAt0].TextBlock);
                 setPlayersAt0++;
             }
             RollOrWait.Content = _rollText;
@@ -220,7 +220,7 @@ namespace SnakeLadder
  
 
         private void DiceOutput(short roll) { decoration.DiceOutput(ref roll, ref Imagin); }   //showing suitable picture according to the player's roll
-        private void ColorTable() { decoration.ColorTable(GridPP); }   //since we have the movement path of the game, it's possible to set the movement to 1 space and fill each space with decoration
+        private void ColorTable() { decoration.ColorTable(Game_Grid); }   //since we have the movement path of the game, it's possible to set the movement to 1 space and fill each space with decoration
         private void MainWindow_KeyDown(object sender,KeyEventArgs e)   //once a key pressed enter the method
         {
             switch (e.Key)
