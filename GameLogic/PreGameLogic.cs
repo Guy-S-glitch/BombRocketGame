@@ -13,26 +13,26 @@ namespace gameLogic
     {
         public List<string> strings = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };   //after failing to get the character  directly from the window the best option is to get the index of the chosen character  and compare it with list that will have the same values
         public List<Player> playerData = new List<Player>();      //keeps the data about every player
-        public int players;
+        public short players,distanceFromLeft = 0, distanceFromBottom = 0;
+
         public void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e,ref ComboBox How_much,ref ListBox keep_data, ref StackPanel select_players, ref Button info)
         {
             if (How_much.SelectedIndex != 0)   //the only way to set how many player are there is to choose item with number value
             {
-                players = How_much.SelectedIndex;
+                players = (short)How_much.SelectedIndex;
                 How_much.IsEnabled = false;   //after the amount of players has chosen this combobox is unrelevent
                 //lablePlayers.Content = $"{players} players chosen";
-                for (int i = 0; i < players; i++) playerData.Add(new Player(i + 1, 0, new TextBlock()));   //initialize the stats of evert player
+                for (short i = 0; i < players; i++) playerData.Add(new Player(i + 1, 0, new TextBlock()));   //initialize the stats of evert player
                 keep_data.ItemsSource = playerData;   //after we filled the needed stats we'll send the information to a listbox that will ask the players for the remaining needed information
-                
-                int left = 0;
-                int bottom = 0;
-                for (int padd = 0; padd < players; padd++)
+
+
+                for (short padd = 0; padd < players; padd++)
                 {
-                    playerData[padd].TextBlock.Padding = new Thickness(left, 0, 0, bottom);   //set a specipic place for every player so in case multiple player will be on the same box they could see their character 
-                                                                                                        //since 6 players is the maximum amount of players we can have
-                    left += 25;
-                    left = padd == 2 ? 0 : left;                  //order will be: 1)Left   2)Middle 3)Rigth  4)Left 5)Middle 6)Rigth
-                    bottom = padd == 2 ? bottom + 25 : bottom;    //order will be: 1)Bottom 2)Bottom 3)Bottom 4)Top  5)Top    6)Top
+                    playerData[padd].TextBlock.Padding = new Thickness(distanceFromLeft, 0, 0, distanceFromBottom);   //set a specipic place for every player so in case multiple player will be on the same box they could see their character 
+                                                                                                                      //since 6 players is the maximum amount of players we can have
+                    distanceFromLeft += 25;
+                    distanceFromLeft = (short)(padd == 2 ? 0 : distanceFromLeft);                              //order will be: 1)Left   2)Middle 3)Rigth  4)Left 5)Middle 6)Rigth
+                    distanceFromBottom = (short)(padd == 2 ? distanceFromBottom + 25 : distanceFromBottom);    //order will be: 1)Bottom 2)Bottom 3)Bottom 4)Top  5)Top    6)Top
 
                     //minimum height of the screen will have to be: 10+(10*minimumHeightOfOneBlock)+10>height -> minimumHeightOfOneBlock=2*25=50 -> 10+10*50+10= 520 = minimum height
                     //minimum width of the screen will have to be: 150+(10*minimumWidthOfOneBlock)+150>width -> minimumWidthOfOneBlock=3*25=75 -> 150+(10*75)+150= 1050 = minimum width

@@ -23,11 +23,21 @@ namespace SnakeLadder
     {
         Decoration decoration = new Decoration();
         PreGame pregameLogic = new PreGame();
+
+        private static Random _random = new Random();
         
-        private static int turn = 1;   //keep tracks of who's turn is it 
-        private static int randomRocketBomb;    //used to contain the random amount of spaces the rocket/bomb send you
-        
-        private static int currentRow, futureRow, currentColumn, futureColumn;
+        private static short _turn = 1;   //keep tracks of who's turn is it 
+        private static short _randomRocketBomb;    //used to contain the random amount of spaces the rocket/bomb send you
+        private static short _currentRow, _futureRow, _currentColumn, _futureColumn, _currentPlace, _nextPlace;
+
+        private static bool _bombFlag = false, _boostFlag = false;   //if player land on bomb raise flag
+        private static bool _ricochet100Flag = false, _winFlag = false;   //flag raised to determain if the player surpass 100 and call relative animation
+
+
+        private string _rollText = "You can roll", _waitText = "Wait";
+        private string _exitMessage = "Are you sure you want to exit", _exitCaption = "Conform Exit", _exitYes = "thanks for playing", _exitNo = "returning to the game";
+        private string _menuMessage = "Are you sure you want to return to the menu", _menuCaption = "Confirm Menu", _menuYes = "going back to menu", _menuNo = "returning to the game";
+
         private void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             pregameLogic.How_much_SelectionChanged(sender, e, ref How_much, ref keep_data, ref select_players, ref info);
@@ -35,365 +45,238 @@ namespace SnakeLadder
 
         private void info_Click(object sender, RoutedEventArgs e)
         {
-            pregameLogic.info_Click(sender,e, ref info,ref keep_data, ref Dice, ref turn_text);
-            int initial = 0;
-            foreach (Player iniplayer in pregameLogic.playerData)
+            pregameLogic.info_Click(sender, e, ref info, ref keep_data, ref Dice, ref turn_text);
+            short setPlayersAt0 = 0;
+            foreach (Player irrelevant in pregameLogic.playerData)
             {
-                GridPP.Children.Remove(pregameLogic.playerData[initial].TextBlock);
-                Grid.SetRow(pregameLogic.playerData[initial].TextBlock, 1);
-                Grid.SetColumn(pregameLogic.playerData[initial].TextBlock, 0);
-                GridPP.Children.Add(pregameLogic.playerData[initial].TextBlock);
-                initial++;
+                GridPP.Children.Remove(pregameLogic.playerData[setPlayersAt0].TextBlock);
+                Grid.SetRow(pregameLogic.playerData[setPlayersAt0].TextBlock, 1);
+                Grid.SetColumn(pregameLogic.playerData[setPlayersAt0].TextBlock, 0);
+                GridPP.Children.Add(pregameLogic.playerData[setPlayersAt0].TextBlock);
+                setPlayersAt0++;
             }
-            RollOrWait.Content = "You can roll";
+            RollOrWait.Content = _rollText;
 
         }
-        private static Random random = new Random();
-        private static int currentPlace, nextPlace;
+
         public menu()
         {
             InitializeComponent();
             ColorTable();   // create the playing board
-            How_much.SelectedIndex = 0;
+            How_much.SelectedIndex = 0 ;
             this.KeyDown += MainWindow_KeyDown;   //access responsive key game
         }
-        private static bool TooMuch = false;   //flag raised to determain if the player surpass 100 and call relative animation
-        private static bool winner = false;
+
         private void Dice_Click(object sender, RoutedEventArgs e)
         {
-            RollOrWait.Content = "Wait";
-            Bomb_rocket_text.Text = "";
-            int rolled = random.Next(1, 7);   //present a cube throw
+            RollOrWait.Content = _waitText;
+            Bomb_rocket_text.Text = string.Empty;
+            short rolled = (short)_random.Next(1, 7);   //present a cube throw
             DiceOutput(rolled);   //the random number showed to the player
-            currentPlace = pregameLogic.playerData[turn - 1].Place;
-            pregameLogic.playerData[turn - 1].Place += rolled;//advance the player relatively to his throw
-            
-            if (pregameLogic.playerData[turn - 1].Place > 100)
-            {
-                TooMuch = true;
-                pregameLogic.playerData[turn - 1].Place = 100 - (pregameLogic.playerData[turn - 1].Place - 100);    //if the player's roll surpass 100 he'll go back the amount he went over
-            }
-            else if (pregameLogic.playerData[turn - 1].Place == 100)   //if the player land on 100 he wins
-            {
-                winner = true;
-            }
-            nextPlace = pregameLogic.playerData[turn - 1].Place;
+            _currentPlace = (short)pregameLogic.playerData[_turn - 1].Place;
+            pregameLogic.playerData[_turn - 1].Place += rolled;//advance the player relatively to his throw
 
-           
-            currentRow = gridInfo()[0];
-            futureRow = gridInfo()[1];
-            currentColumn = gridInfo()[2];
-            futureColumn = gridInfo()[3];
+            if (pregameLogic.playerData[_turn - 1].Place > 100)
+            {
+                _ricochet100Flag = true;
+                pregameLogic.playerData[_turn - 1].Place = 100 - (pregameLogic.playerData[_turn - 1].Place - 100);    //if the player's roll surpass 100 he'll go back the amount he went over
+            }
+            else if (pregameLogic.playerData[_turn - 1].Place == 100)   //if the player land on 100 he wins
+            {
+                _winFlag = true;
+            }
+            _nextPlace = (short)pregameLogic.playerData[_turn - 1].Place;
+
+            
+            _currentRow = gridInfo()[0];
+            _futureRow = gridInfo()[1];
+            _currentColumn = gridInfo()[2];
+            _futureColumn = gridInfo()[3];
 
             ColumnRowAnimation(sender, e);   //call the animation
         }
-        private List<int> gridInfo()
+        private List<short> gridInfo() //contains where every player needs to go according to the roll
         {
-            int currentRow, futureRow, currentColumn, futureColumn;
-            currentRow =    //every row is 10 spaces, every row is from column 1-10
-                 currentPlace == 0 ? 1    //at the start the current place is 0 and the row of 0 is 1
-               : currentPlace % 10 != 0 ? 1 + currentPlace / 10    //example: player on place 8-> 8/10=0 but we start our column from 1 therefore we'll add 1 to match our board-> 1+8/10=1+0-> row=1
-               : currentPlace / 10;   //example: player land on 10-> 10/10=1, since every row is 10 spaces, in this case, it will be wrong to add 1-> 10/10=1 -> row=1
+            //every row is 10 spaces, every row is from column 1-10
+            _currentRow = (short)(_currentPlace == 0 ? 1 : _currentPlace % 10 != 0 ? 1 + _currentPlace / 10 : _currentPlace / 10);
+            _futureRow = (short)(_nextPlace % 10 != 0 ? 1 + _nextPlace / 10 : _nextPlace / 10);
+            // place=0 => row=1 // place=1 => row= 1+1/10 = 1+0= 1 // place=10 => row= 10/10 = 1
 
-            futureRow =
-                 nextPlace % 10 != 0 ? 1 + nextPlace / 10
-                 : nextPlace / 10;
+            //every column is 10 spaces, every colomn is from row 1-10, every 2nd row the direction is changed -> example:1st row goes left to right, 2nd row goes from right to left 
+            _currentColumn = (short)(_currentPlace == 0 ? 0 : _currentRow % 2 != 0 && _currentPlace % 10 == 0 ? 10 : _currentRow % 2 == 0 && _currentPlace % 10 == 0 ? 1 : _currentRow % 2 == 0 && _currentPlace % 10 != 0 ? 11 - (_currentPlace % 10) : _currentPlace % 10);
+            _futureColumn = (short)(_futureRow % 2 != 0 && _nextPlace % 10 == 0 ? 10 : _futureRow % 2 == 0 && _nextPlace % 10 == 0 ? 1 : _futureRow % 2 == 0 && _nextPlace % 10 != 0 ? 11 - (_nextPlace % 10) : _nextPlace % 10);
+            // place=0 => column=0 // place=10 => row=1 => column=10  // place=20 => row=2 => column=1 // place=11 => row=2 => column= 11-(11%10) = 11-1 = 10 // place=1 => column= 1%10 = 1                                                                                                                                                                                              //example:10-> 10's row is 1 using the row's formula, 1%2!=0 and 10%10=0 -> column is set to 10
 
+            return new List<short> { _currentRow, _futureRow, _currentColumn, _futureColumn };
+        }  
 
-            currentColumn =   //every column is 10 spaces, every colomn is from row 1-10, every 2nd row the direction is changed-> example:1st row goes left to right, 2nd row goes from right to left 
-                currentPlace == 0 ? 0   //at the start the current place is 0 and the column of 0 is 0
-              : currentRow % 2 != 0 && currentPlace % 10 == 0 ? 10   //example:10-> 10's row is 1 using the row's formula, 1%2!=0 and 10%10=0 -> column is set to 10
-              : currentRow % 2 == 0 && currentPlace % 10 == 0 ? 1   //example:20-> 20's row is 2, 2%2=0 and 20%10=0 -> column is set to 1
-              : currentRow % 2 == 0 && currentPlace % 10 != 0 ? 11 - (currentPlace % 10)   //example:11-> 11's row is 2, 2%2=0 and 11%10=1 -> since every 2nd row the path is from right to left we'll count from the right ->11-(11%10)=11-1-> column=10    
-              : currentPlace % 10;   //example:1-> 1's row is 1, 1%2!=0 and 1%10=1 -> column=1
-
-
-            futureColumn =
-                futureRow % 2 != 0 && nextPlace % 10 == 0 ? 10
-                : futureRow % 2 == 0 && nextPlace % 10 == 0 ? 1
-                : futureRow % 2 == 0 && nextPlace % 10 != 0 ? 11 - (nextPlace % 10)
-                : nextPlace % 10;
-           
-            return new List<int> { currentRow, futureRow, currentColumn, futureColumn };
-        }   //contains where every player needs to go according to the roll
-
-        private void Winner(object sender,EventArgs e)
+        private void Winner(object sender, EventArgs e)
         {
-            MessageBox.Show($"player {turn}. {pregameLogic.playerData[turn - 1].Name} won");
+            MessageBox.Show($"player {_turn}. {pregameLogic.playerData[_turn - 1].Name} won");
             Celebration celebration = new Celebration(pregameLogic.playerData, pregameLogic.players);
             this.Close();   // close current window
             celebration.Show();   // goes to celebration screen
         }
-        private void ColumnRowAnimation(object sender, EventArgs e)
-        {
-           
-            Dice.IsEnabled = false;   //while the animation running the dice button isn't available
-            if (winner)    //player land on the 100 space
-            {
-                Int32Animation columnMove = new Int32Animation
-                {
-                    From = currentColumn,
-                    To = futureColumn,
-                    Duration = TimeSpan.FromMilliseconds(350)
-                };
-                columnMove.Completed += Winner;
-                winner = false;
-                pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, columnMove);
-            }
-            else if (currentRow == futureRow && !TooMuch) //same row
-            {
-                Int32Animation columnMove = new Int32Animation
-                {
-                    From = currentColumn,
-                    To = futureColumn,
-                    Duration = TimeSpan.FromMilliseconds(350)
-                };
-                columnMove.Completed += CheckForExtas;   //after player got to ouhisr final place check if he land on a bomb/rocket
-
-                pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, columnMove);
-            }
-            else if (TooMuch)   //animation for ricocheting 100 if went over
-            {
-                Int32Animation MoveTo100 = new Int32Animation
-                {
-                    From = currentColumn,
-                    To = 1,
-                    Duration = TimeSpan.FromMilliseconds(350)
-                };
-                TooMuch = false;
-                currentColumn = (int)MoveTo100.To;
-                MoveTo100.Completed += ColumnRowAnimation;    //after touching 100 go to your actual place
-                pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, MoveTo100);
-            }
-            else if (!bombFlag) //difference rows and direction is positive toward the finish
-            {
-                if (currentRow % 2 == 1)//direction from left to right
-                {
-                    Int32Animation columnMoveL2R = new Int32Animation
-                    {
-                        From = currentColumn,
-                        To = 10,
-                        Duration = TimeSpan.FromMilliseconds(350)
-                    };
-                    columnMoveL2R.Completed += ColumnMove_Completed;
-                    currentColumn = (int)columnMoveL2R.To;
-                    pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, columnMoveL2R);
-
-                }
-                else//direction from right to left
-                {
-                    Int32Animation columnMoveR2L = new Int32Animation
-                    {
-                        From = currentColumn,
-                        To = 1,
-                        Duration = TimeSpan.FromMilliseconds(350)
-                    };
-                    columnMoveR2L.Completed += ColumnMove_Completed;
-                    currentColumn = (int)columnMoveR2L.To;
-                    pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, columnMoveR2L);
-
-                }
-            }
-            else     //direction is negative away from the finish
-            {
-                if (currentRow % 2 == 0)//direction from right to left
-                {
-                    Int32Animation columnMoveL2R = new Int32Animation
-                    {
-                        From = currentColumn,
-                        To = 10,
-                        Duration = TimeSpan.FromMilliseconds(350)
-                    };
-                    columnMoveL2R.Completed += ColumnMove_Completed;
-                    currentColumn = (int)columnMoveL2R.To;
-                    pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, columnMoveL2R);
-
-                }
-                else//direction from left to right
-                {
-                    Int32Animation columnMoveR2L = new Int32Animation
-                    {
-                        From = currentColumn,
-                        To = 1,
-                        Duration = TimeSpan.FromMilliseconds(350)
-                    };
-                    columnMoveR2L.Completed += ColumnMove_Completed;
-                    currentColumn = (int)columnMoveR2L.To;
-                    pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, columnMoveR2L);
-
-                }
-            }
-        }
-        private bool bombFlag = false;   //if player land on bomb raise flag
-        private void CheckForExtas(object sender, EventArgs e)
-        {
-            int total = 0;   //count the total spaces player gained/lost cause of bombs/rockets
-            bool boostFlag = false;   //if player land on rocket raise flag
-            bool falg=false;   //if player land on anything raise flag 
-            bombFlag = false;
-            List<int> boost = new List<int>() { 4, 23, 29, 44, 63, 71 };   //places of every rocket on the board
-            foreach (int placeBoost in boost) if (placeBoost == nextPlace)
-                {
-                    //if player land on rocket show the character  on the rocket before moving him
-                    Thread.Sleep(100);
-                    randomRocketBomb = random.Next(1, 7);   //landing on rocket makes you gain randomly between 1-6 spaces
-                    total += randomRocketBomb;
-                    currentPlace = pregameLogic.playerData[turn - 1].Place;     
-                    pregameLogic.playerData[turn - 1].Place += randomRocketBomb;
-                    nextPlace = pregameLogic.playerData[turn - 1].Place;
-                    falg = true;
-                    boostFlag = true;
-                    break;  
-                }
-            
-            List<int> Bomb = new List<int>() { 15, 72, 81, 94, 98 };   //places of every bomb on the board
-            if(!falg)   //if player land on rocket skip the bomb check
-            foreach (int placeBomb in Bomb) if (placeBomb == pregameLogic.playerData[turn - 1].Place)
-                {
-                    //if player land on bomb show the character  on the bomb before moving him
-                    Thread.Sleep(100);
-                    randomRocketBomb = random.Next(1, 13);   //landing on bomb makes you lose randomly between 1-12 spaces
-                    total -= randomRocketBomb;
-                    currentPlace = pregameLogic.playerData[turn - 1].Place;
-                    pregameLogic.playerData[turn - 1].Place -= randomRocketBomb;
-                    nextPlace = pregameLogic.playerData[turn - 1].Place;
-                    falg = true;
-                    bombFlag = true;
-                    break;
-                }
-
-
-            //give the player relative message about how much he gain/lost from landing on bombs/rockets
-            Bomb_rocket_text.Text = bombFlag ? $"Player {turn} hit bombs. in total lose {Math.Abs(total)} steps"
-                : boostFlag ? $"Player {turn} hit boosts. in total gain {total} steps": Bomb_rocket_text.Text;
-            if (falg)//falg raised mean the player land on bomb/rocket and now he's in difference place, therefore we'll need to check if the player land on another bomb/rocket 
-            {
-                currentRow = gridInfo()[0];
-                futureRow = gridInfo()[1];
-                currentColumn = gridInfo()[2];
-                futureColumn = gridInfo()[3];
-                ColumnRowAnimation(sender, e);
-            }
-            else next_turn(sender, e);
-
-        }
-        private void next_turn(object sender, EventArgs e)
-        {
-            RollOrWait.Content = "You can roll";
-            Dice.IsEnabled = true;
-            turn = turn == pregameLogic.players ? 1    //if it's the last player's turn then next turn returned to the first player-> 3 players, it's player 3's turn, next turn will be player 1
-    : turn + 1;   //else it's the next player turn -> 3 players, it's player 2's turn, next turn will be player 3
-            turn_text.Text = $"Player {turn}'s turn";
-        }
 
         private void ColumnMove_Completed(object sender, EventArgs e)
         {
-            if (!bombFlag)
+            Int32Animation rowMove = new Int32Animation
             {
-                Int32Animation rowMove = new Int32Animation
-                {
-                    From = currentRow,
-                    To = currentRow + 1,
-                    Duration = TimeSpan.FromMilliseconds(100)
-                };
-                currentRow++;
-                rowMove.Completed += ColumnRowAnimation;
-                pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.RowProperty, rowMove);
-            }
-            else
+                From = _currentRow,
+                Duration = TimeSpan.FromMilliseconds(100)
+            };
+            if (_bombFlag) rowMove.To = _currentRow - 1;
+            else rowMove.To = _currentRow + 1;
+            _currentRow = (short)rowMove.To;
+            rowMove.Completed += ColumnRowAnimation;
+            pregameLogic.playerData[_turn - 1].TextBlock.BeginAnimation(Grid.RowProperty, rowMove);
+        }
+
+        private void ColumnRowAnimation(object sender, EventArgs e)
+        {
+            Dice.IsEnabled = false;   //while the animation running the dice button isn't available
+            Int32Animation columnMove = new Int32Animation
             {
-                Int32Animation rowMove = new Int32Animation
-                {
-                    From = currentRow,
-                    To = currentRow -1 ,
-                    Duration = TimeSpan.FromMilliseconds(100)
-                };
-                currentRow--;
-                rowMove.Completed += ColumnRowAnimation;
-                pregameLogic.playerData[turn - 1].TextBlock.BeginAnimation(Grid.RowProperty, rowMove);
+                From = _currentColumn,
+                To = _futureColumn,
+                Duration = TimeSpan.FromMilliseconds(350)
+            };
+
+            if (_winFlag)
+            {
+                columnMove.Completed += Winner;
+                _winFlag = false;
             }
+
+            else if (_ricochet100Flag)
+            {
+                _ricochet100Flag = false;
+                columnMove.To = 1;
+                columnMove.Completed += ColumnRowAnimation;
+            }
+
+            else if (_currentRow != _futureRow)
+            {
+                if (_bombFlag) { if (_currentRow % 2 == 0) columnMove.To = 10; else columnMove.To = 1; }
+                else { if (_currentRow % 2 == 1) columnMove.To = 10; else columnMove.To = 1; }
+                columnMove.Completed += ColumnMove_Completed;
+            }
+
+            else columnMove.Completed += CheckForExtas;   //after player got to ouhisr final place check if he land on a bomb/rocket
+            _currentColumn = (short)columnMove.To;
+            pregameLogic.playerData[_turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, columnMove);
         }
 
 
-        private void DiceOutput(int roll)   //showing suitable picture according to the player's roll
+        
+        private void CheckForExtas(object sender, EventArgs e)
         {
-            decoration.DiceOutput(ref roll, ref Imagin);
-        }      
+            short total = 0;   //count the total spaces player gained/lost cause of bombs/rockets
+            _boostFlag = false;   //if player land on rocket raise flag 
+            _bombFlag = false;
+            short[] bombRocketPlaces = { 4, 23, 29, 44, 63, 71, 15, 72, 81, 94, 98 };
+            for (short checkForBombRocket = 0; checkForBombRocket < bombRocketPlaces.Count(); checkForBombRocket++) if (_nextPlace == bombRocketPlaces[checkForBombRocket])
+                {
+                    Thread.Sleep(100);
+                    if (checkForBombRocket < 6) //landing on rocket
+                    {
+                        _randomRocketBomb = (short)_random.Next(1, 7);
+                        _boostFlag = true;
+                    }
+                    else
+                    {
+                        _randomRocketBomb = (short)_random.Next(-12, 0);
+                        _bombFlag = true;
+                    }
+                    total += _randomRocketBomb;
+                    _currentPlace = (short)pregameLogic.playerData[_turn - 1].Place;
+                    pregameLogic.playerData[_turn - 1].Place += _randomRocketBomb;
+                    _nextPlace = (short)pregameLogic.playerData[_turn - 1].Place;
+                    break;
+                }
 
-        private void ColorTable()   //since we have the movement path of the game, it's possible to set the movement to 1 space and fill each space with decoration
-        {
-            decoration.ColorTable(GridPP);
+            //give the player relative message about how much he gain/lost from landing on bombs/rockets
+            Bomb_rocket_text.Text = _bombFlag ? $"Player {_turn} hit bombs. in total lose {Math.Abs(total)} steps" : _boostFlag ? $"Player {_turn} hit boosts. in total gain {total} steps" : Bomb_rocket_text.Text;
+           
+            if (_boostFlag || _bombFlag)   //falg raised mean the player land on bomb/rocket and now he's in difference place, therefore we'll need to check if the player land on another bomb/rocket 
+            {
+                _currentRow = gridInfo()[0];
+                _futureRow = gridInfo()[1];
+                _currentColumn = gridInfo()[2];
+                _futureColumn = gridInfo()[3];
+                ColumnRowAnimation(sender, e);
+            }
+            else _next_turn_values(sender, e);
         }
 
-        private void MainWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)   //once a key pressed enter the method
+        private void _next_turn_values(object sender, EventArgs e)
+        {
+            RollOrWait.Content = _rollText;
+            Dice.IsEnabled = true;
+            _turn = (short)(_turn == pregameLogic.players ? 1 : _turn + 1);
+                //  player=3, turn=3, next turn=1  // player=3, turn=2, next turn=3
+            turn_text.Text = $"Player {_turn}'s turn";
+        }
+ 
+
+        private void DiceOutput(short roll) { decoration.DiceOutput(ref roll, ref Imagin); }   //showing suitable picture according to the player's roll
+        private void ColorTable() { decoration.ColorTable(GridPP); }   //since we have the movement path of the game, it's possible to set the movement to 1 space and fill each space with decoration
+        private void MainWindow_KeyDown(object sender,KeyEventArgs e)   //once a key pressed enter the method
         {
             switch (e.Key)
             {
                 case Key.Escape:   //if player press esc ask him if he's sure he want to exit the game
-                    ExitConform();
+                    ExitConfirm();
                     break;
                 case Key.Home:   //if player press home ask him if he's sure he want to return to the menu
-                    HomeConform();
+                    HomeConfirm();
                     break;
                 case Key.Tab:
                     if (Dice.IsEnabled) Dice_Click(sender, e);
                     break;
-                default: break;
             }
         }
-        private void back_Click(object sender, RoutedEventArgs e)   //if player press menu button return to the menu 
+        private void back_Click(object sender, RoutedEventArgs e) { HomeConfirm(); }  //if player press menu button return to the menu 
+        private void exit_Click(object sender, RoutedEventArgs e) { ExitConfirm(); }//if player press the exit button exit the game
+        private void ExitConfirm()
         {
-            HomeConform();
-        }
-        private void exit_Click(object sender, RoutedEventArgs e)   //if player press the exit button exit the game
-        {
-            ExitConform();
-        }
-        private void ExitConform()
-        {
-            object var = MessageBox.Show("Are you sure you  want to exit", "Conform Exit", MessageBoxButton.YesNo);
+            object var = MessageBox.Show(_exitMessage, _exitCaption, MessageBoxButton.YesNo);
             switch (var)
             {
                 case MessageBoxResult.Yes:
-                    MessageBox.Show("thanks for playing");
+                    MessageBox.Show(_exitYes);
                     this.Close();
                     break;
                 case MessageBoxResult.No:
-                    MessageBox.Show("returning to the game");
+                    MessageBox.Show(_exitNo);
                     break;
-
             }
         }
-        private void HomeConform()
+
+        private void HomeConfirm()
         {
-            object var = MessageBox.Show("Are you sure you  want to return to the menu", "Conform Menu", MessageBoxButton.YesNo);
+            object var = MessageBox.Show(_menuMessage, _menuCaption, MessageBoxButton.YesNo);
             switch (var)
             {
                 case MessageBoxResult.Yes:
-                    MessageBox.Show("going back to menu");
+                    MessageBox.Show(_menuYes);
                     MainWindow mainWindow = new MainWindow();
                     mainWindow.Show();
                     this.Close();
                     break;
                 case MessageBoxResult.No:
-                    MessageBox.Show("returning to the game");
+                    MessageBox.Show(_menuNo);
                     break;
-
             }
         }
-
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is ComboBox comboBox && comboBox.SelectedItem != null)
             {
                 comboBox.IsEnabled = false;
-                
-                foreach (Player player in pregameLogic.playerData)
-                {
-                    player.charactersHere.Remove(comboBox.SelectedItem.ToString());
-                }
+                foreach (Player player in pregameLogic.playerData) player.charactersHere.Remove(comboBox.SelectedItem.ToString());
             }
-           
         }
     }
 }
+

@@ -12,7 +12,7 @@ namespace GameLogic
 {
     public class Decoration
     {
-        public void DiceOutput(ref int roll,ref Image Imagin)   //showing suitable picture according to the player's roll
+        public void DiceOutput(ref short roll,ref Image Imagin)   //showing suitable picture according to the player's roll
         {
             switch (roll)
             {
@@ -32,7 +32,7 @@ namespace GameLogic
         }
         public void ColorTable(Grid GridPP)   //since we have the movement path of the game, it's possible to set the movement to 1 space and fill each space with decoration
         {
-            int start = 0;
+            short start = 0;
             while (start < 100)
             {
                 Label label = new Label();
@@ -58,8 +58,8 @@ namespace GameLogic
                 label.VerticalContentAlignment = VerticalAlignment.Top;
                 label.Foreground = new SolidColorBrush(Colors.GhostWhite);
 
-                int Row = start % 10 != 0 ? 1 + start / 10 : start / 10;
-                int Colom = Row % 2 != 0 && start % 10 == 0 ? 10 : Row % 2 == 0 && start % 10 == 0 ? 1 : Row % 2 == 0 && start % 10 != 0 ? 11 - (start % 10) : start % 10;
+                short Row = (short)(start % 10 != 0 ? 1 + start / 10 : start / 10);
+                short Colom = (short)(Row % 2 != 0 && start % 10 == 0 ? 10 : Row % 2 == 0 && start % 10 == 0 ? 1 : Row % 2 == 0 && start % 10 != 0 ? 11 - (start % 10) : start % 10);
                 Grid.SetRow(label, Row);
                 Grid.SetColumn(label, Colom);
                 GridPP.Children.Add(label);

@@ -50,13 +50,13 @@ namespace SnakeLadder
             Player backUpPlayer = Data[0];
             for (int i = 0; i < count; i++)
                 {
-                if (i == 0) foreach (Player player in Data) player.trash = "hello";
+                if (i == 0) foreach (Player player in Data) player.trash = true;
                 int max = 0;
                 int j = 0;
                 int k = 0;
                 foreach (Player player in Data)
                 {
-                    if (player.Place >= max && !string.IsNullOrEmpty(player.trash))
+                    if (player.Place >= max && player.trash)
                     {
                         max = player.Place;
                         backUpPlayer = player;
@@ -65,7 +65,7 @@ namespace SnakeLadder
                     k++;
                 }
                 backup.Add(backUpPlayer);
-                Data[j].trash="";
+                Data[j].trash=false;
             }
             
             /*
