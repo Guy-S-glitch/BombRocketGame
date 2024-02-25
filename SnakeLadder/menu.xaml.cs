@@ -29,7 +29,7 @@ namespace SnakeLadder
         private static short _turn = 1;   //keep tracks of who's turn is it 
         private static short _randomRocketBomb;    //used to contain the random amount of spaces the rocket/bomb send you
         private static short _currentRow, _futureRow, _currentColumn, _futureColumn, _currentPlace, _nextPlace;   //used to navigate the character on the grid
-        private static short[] bombRocketPlaces = { 4, 23, 29, 44, 63, 71, 15, 72, 81, 94, 98 };
+        private static short[] _bombRocketPlaces = { 4, 23, 29, 44, 63, 71, 15, 72, 81, 94, 98 };
 
         private static bool _bombFlag = false, _boostFlag = false;   //if player land on bomb raise flag
         private static bool _ricochet100Flag = false, _winFlag = false;   //flag raised to determain if the player surpass 100 and call relative animation
@@ -41,6 +41,15 @@ namespace SnakeLadder
         private void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e) { pregameLogic.How_much_SelectionChanged(sender, e, ref How_much, ref keep_data, ref select_players, ref info); }
         private void info_Click(object sender, RoutedEventArgs e) { pregameLogic.info_Click(sender, e, ref info, ref keep_data, ref Dice, ref turn_text, ref Game_Grid, ref RollOrWait, _rollText); }
 
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ComboBox comboBox && comboBox.SelectedItem != null)
+            {
+                comboBox.IsEnabled = false;
+                foreach (Player player in pregameLogic.playerData) player.charactersHere.Remove(comboBox.SelectedItem.ToString());
+            }
+        }
+        private void ColorTable() { decoration.ColorTable(Game_Grid); }   //since we have the movement path of the game, it's possible to set the movement to 1 space and fill each space with decoration
 
         public menu()
         {
@@ -169,8 +178,8 @@ namespace SnakeLadder
         }
         private void BoockCheckBombRocket()
         {
-            for (short checkForBombRocket = 0; checkForBombRocket < bombRocketPlaces.Count(); checkForBombRocket++)
-                if (_nextPlace == bombRocketPlaces[checkForBombRocket])
+            for (short checkForBombRocket = 0; checkForBombRocket < _bombRocketPlaces.Count(); checkForBombRocket++)
+                if (_nextPlace == _bombRocketPlaces[checkForBombRocket])
                 {
                     Thread.Sleep(100);
                     if (checkForBombRocket < 6) //landing on rocket
@@ -225,7 +234,6 @@ namespace SnakeLadder
             celebration.Show();   // goes to celebration screen
         }
 
-        private void ColorTable() { decoration.ColorTable(Game_Grid); }   //since we have the movement path of the game, it's possible to set the movement to 1 space and fill each space with decoration
         private void MainWindow_KeyDown(object sender,KeyEventArgs e)   //once a key pressed enter the method
         {
             switch (e.Key)
@@ -274,14 +282,7 @@ namespace SnakeLadder
                     break;
             }
         }
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (sender is ComboBox comboBox && comboBox.SelectedItem != null)
-            {
-                comboBox.IsEnabled = false;
-                foreach (Player player in pregameLogic.playerData) player.charactersHere.Remove(comboBox.SelectedItem.ToString());
-            }
-        }
+
     }
 }
 

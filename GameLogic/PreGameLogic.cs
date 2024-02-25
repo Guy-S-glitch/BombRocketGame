@@ -13,16 +13,16 @@ namespace gameLogic
     {
         public List<string> strings = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };   //after failing to get the character  directly from the window the best option is to get the index of the chosen character  and compare it with list that will have the same values
         public List<Player> playerData = new List<Player>();      //keeps the data about every player
-        public static short players,distanceFromLeft = 0, distanceFromBottom = 0;
+        public short players,distanceFromLeft = 0, distanceFromBottom = 0;
         private string _turnText = "Player 1's turn", _catchText = "fill everything please";
 
         public void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e,ref ComboBox How_much,ref ListBox keep_data, ref StackPanel select_players, ref Button info)
         {
             if (How_much.SelectedIndex != 0)   //the only way to set how many player are there is to choose item with number value
             {
-                initialPlayerSelectStats(How_much, ref keep_data);
-                placeForEveryCharacter();
-                hideShow(ref How_much, ref select_players, ref info, ref keep_data);
+                initialPlayerSelectStats(How_much, ref keep_data);   //set data about every player
+                placeForEveryCharacter();   //set a specipic place for every player so in case multiple player will be on the same box they could see their character 
+                hideShow(ref How_much, ref select_players, ref info, ref keep_data);   //ignore unnecessary parts and show the relevant ones
             }
         }
         private void initialPlayerSelectStats(ComboBox How_much, ref ListBox keep_data)
@@ -36,7 +36,7 @@ namespace gameLogic
         {
             for (short padd = 0; padd < players; padd++)
             {
-                playerData[padd].GetBlock().Padding = new Thickness(distanceFromLeft, 0, 0, distanceFromBottom);   //set a specipic place for every player so in case multiple player will be on the same box they could see their character                                                                                                    //since 6 players is the maximum amount of players we can have
+                playerData[padd].GetBlock().Padding = new Thickness(distanceFromLeft, 0, 0, distanceFromBottom);   
                 distanceFromLeft += 25;
                 distanceFromLeft = (short)(padd == 2 ? 0 : distanceFromLeft);                              //order will be: 1)Left   2)Middle 3)Rigth  4)Left 5)Middle 6)Rigth
                 distanceFromBottom = (short)(padd == 2 ? distanceFromBottom + 25 : distanceFromBottom);    //order will be: 1)Bottom 2)Bottom 3)Bottom 4)Top  5)Top    6)Top
@@ -51,7 +51,6 @@ namespace gameLogic
             info.Visibility = Visibility.Visible;
             keep_data.Visibility = Visibility.Visible;
         }
-
         public short GetPlayers() { return players; }
 
 
