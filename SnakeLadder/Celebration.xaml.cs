@@ -23,12 +23,11 @@ namespace SnakeLadder
     /// </summary>
     public partial class Celebration : Window
     {
-        public Celebration(List<Player> Data,int players)
-        {
-            
-            InitializeComponent();
-            List<Player> backup = new List<Player>();
-            List<Label> ranky = new List<Label>()
+        private string _exitMessage = "Are you sure you want to exit", _exitCaption = "Conform Exit", _exitYes = "thanks for playing", _exitNo = "returning to the game";
+        private string _menuMessage = "Are you sure you want to return to the menu", _menuCaption = "Confirm Menu", _menuYes = "going back to menu", _menuNo = "returning to the game";
+        private short _max, _addAtSortedWay, _numOfCurrentmax, _checkEveryPlayer;
+        private List<Player> _backUpList = new List<Player>();
+        private List<Label> _Ranks = new List<Label>()
             {
                 new Label{Content="🥇 First",Foreground=new SolidColorBrush(Colors.Gold)},
                 new Label{Content="🥈 Second",Foreground=new SolidColorBrush(Colors.Silver)},
@@ -37,46 +36,43 @@ namespace SnakeLadder
                 new Label{Content="Fifth"},
                 new Label{Content="Sixth"}
             };
-            foreach (Label addi in ranky)
+        public Celebration(List<Player> Data,short players)
+        {
+            InitializeComponent();
+
+            foreach (Label addLable in _Ranks)
             {
-                ranks.Items.Add(addi);
+                ranks.Items.Add(addLable);
             }
             for(int deleteAt=5;deleteAt>=players;deleteAt--) ranks.Items.RemoveAt(deleteAt);
 
-
-
-
-            int count = Data.Count;
+            short count = (short)Data.Count;
             Player backUpPlayer = Data[0];
-            for (int i = 0; i < count; i++)
+            foreach (Player player in Data) player.SetTrash(true);   //sort the players by their _max place value, after player declared as having the _max value we'll make this variable difference and will ignore it
+            for (_checkEveryPlayer = 0; _checkEveryPlayer < count; _checkEveryPlayer++)
                 {
-                if (i == 0) foreach (Player player in Data) player.SetTrash(true);
-                int max = 0;
-                int j = 0;
-                int k = 0;
+                _max = 0;
+                _addAtSortedWay = 0;
+                _numOfCurrentmax = 0;
                 foreach (Player player in Data)
                 {
-                    if (player.Place >= max && player.GetTrash())
+                    if (player.Place >= _max && player.GetTrash())
                     {
-                        max = player.Place;
+                        _max = player.Place;
                         backUpPlayer = player;
-                        j = k;
+                        _addAtSortedWay = _numOfCurrentmax;
                     }
-                    k++;
+                    _numOfCurrentmax++;
                 }
-                backup.Add(backUpPlayer);
-                Data[j].SetTrash(false);
+                _backUpList.Add(backUpPlayer);
+                Data[_addAtSortedWay].SetTrash(false);
             }
-            
-            /*
-            EndGame.ItemsSource = backup;
-            */
-            EndGame.ItemsSource = backup;
+            EndGame.ItemsSource = _backUpList;
         }
 
-        private void Amogus_MediaEnded(object sender, RoutedEventArgs e)
+        private void gif_MediaEnded(object sender, RoutedEventArgs e)
         {
-            Amogus.Position = TimeSpan.FromMilliseconds(1);
+            gif.Position = TimeSpan.FromMilliseconds(1);
         }
 
         private void MainWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)   //once a key pressed enter the method
@@ -89,45 +85,38 @@ namespace SnakeLadder
                 case Key.Home:   //if player press home ask him if he's sure he want to return to the menu
                     HomeConfirm();
                     break;
-                default: break;
             }
         }
-        private void back_Click(object sender, RoutedEventArgs e)   //if player press menu button return to the menu 
-        {
-            HomeConfirm();
-        }
-        private void exit_Click(object sender, RoutedEventArgs e)   //if player press the exit button exit the game
-        {
-            ExitConfirm();
-        }
+        private void back_Click(object sender, RoutedEventArgs e) { HomeConfirm(); }   //if player press menu button return to the menu 
+        private void exit_Click(object sender, RoutedEventArgs e) { ExitConfirm(); }  //if player press the exit button exit the game
         private void ExitConfirm()
         {
-            object var = MessageBox.Show("Are you sure you  want to exit", "Conform Exit", MessageBoxButton.YesNo);
+            object var = MessageBox.Show(_exitMessage, _exitCaption, MessageBoxButton.YesNo);
             switch (var)
             {
                 case MessageBoxResult.Yes:
-                    MessageBox.Show("thanks for playing");
+                    MessageBox.Show(_exitYes);
                     this.Close();
                     break;
                 case MessageBoxResult.No:
-                    MessageBox.Show("returning to the game");
+                    MessageBox.Show(_exitNo);
                     break;
 
             }
         }
         private void HomeConfirm()
         {
-            object var = MessageBox.Show("Are you sure you  want to return to the menu", "Conform Menu", MessageBoxButton.YesNo);
+            object var = MessageBox.Show(_menuMessage, _menuCaption, MessageBoxButton.YesNo);
             switch (var)
             {
                 case MessageBoxResult.Yes:
-                    MessageBox.Show("going back to menu");
+                    MessageBox.Show(_menuYes);
                     MainWindow mainWindow = new MainWindow();
                     mainWindow.Show();
                     this.Close();
                     break;
                 case MessageBoxResult.No:
-                    MessageBox.Show("returning to the game");
+                    MessageBox.Show(_menuNo);
                     break;
 
             }
