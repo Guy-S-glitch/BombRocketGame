@@ -25,14 +25,12 @@ namespace gameLogic
                 hideShow(ref How_much, ref select_players, ref info, ref keep_data);
             }
         }
-        private void hideShow(ref ComboBox How_much,ref StackPanel select_players, ref Button info,ref ListBox keep_data)
+        private void initialPlayerSelectStats(ComboBox How_much, ref ListBox keep_data)
         {
-            How_much.Visibility = Visibility.Hidden;
-            select_players.Visibility = Visibility.Hidden;
-
-            //after selecting how many playing now we need to know information on each player
-            info.Visibility = Visibility.Visible;
-            keep_data.Visibility = Visibility.Visible;
+            players = (short)How_much.SelectedIndex;
+            How_much.IsEnabled = false;   //after the amount of players has chosen this combobox is unrelevent
+            for (short i = 0; i < players; i++) playerData.Add(new Player((short)(i + 1), 0, new TextBlock()));   //initialize the stats of evert player
+            keep_data.ItemsSource = playerData;   //after we filled the needed stats we'll send the information to a listbox that will ask the players for the remaining needed information
         }
         private void placeForEveryCharacter()
         {
@@ -44,25 +42,30 @@ namespace gameLogic
                 distanceFromBottom = (short)(padd == 2 ? distanceFromBottom + 25 : distanceFromBottom);    //order will be: 1)Bottom 2)Bottom 3)Bottom 4)Top  5)Top    6)Top
             }
         }
-        private void initialPlayerSelectStats(ComboBox How_much, ref ListBox keep_data)
+        private void hideShow(ref ComboBox How_much, ref StackPanel select_players, ref Button info, ref ListBox keep_data)
         {
-            players = (short)How_much.SelectedIndex;
-            How_much.IsEnabled = false;   //after the amount of players has chosen this combobox is unrelevent
-            for (short i = 0; i < players; i++) playerData.Add(new Player((short)(i + 1), 0, new TextBlock()));   //initialize the stats of evert player
-            keep_data.ItemsSource = playerData;   //after we filled the needed stats we'll send the information to a listbox that will ask the players for the remaining needed information
+            How_much.Visibility = Visibility.Hidden;
+            select_players.Visibility = Visibility.Hidden;
+
+            //after selecting how many playing now we need to know information on each player
+            info.Visibility = Visibility.Visible;
+            keep_data.Visibility = Visibility.Visible;
         }
+
         public short GetPlayers() { return players; }
 
 
-        public void info_Click(object sender, RoutedEventArgs e, ref Button info, ref ListBox keep_data, ref Button Dice, ref TextBlock turn_text)
+        public void info_Click(object sender, RoutedEventArgs e, ref Button info, ref ListBox keep_data, ref Button Dice, ref TextBlock turn_text,ref Grid Game_Grid,ref Label RollOrWait,string _rollText)
         { 
             try   //there will be an error if the player will send null info, thus we'll use try & catch
             {
                 CheckNullException(ref playerData);
                 gameModeSetting(ref info, ref keep_data, ref Dice, ref turn_text);
+                executeSetting(ref Game_Grid, ref RollOrWait, _rollText);
             }
             catch { MessageBox.Show(_catchText); }
         }
+
         private void CheckNullException(ref List<Player> playerData)
         {
             foreach (Player player in playerData)
@@ -79,6 +82,19 @@ namespace gameLogic
             keep_data.Visibility = Visibility.Hidden;
             Dice.IsEnabled = true;   //make the dice clickable
             turn_text.Text = _turnText;   //since it's the start, it's player 1's turn
+        }
+        private void executeSetting(ref Grid Game_Grid, ref Label RollOrWait, string _rollText)
+        {
+            short setPlayersAt0 = 0;
+            foreach (Player irrelevantName in playerData)
+            {
+                Game_Grid.Children.Remove(playerData[setPlayersAt0].GetBlock());
+                Grid.SetRow(playerData[setPlayersAt0].GetBlock(), 1);
+                Grid.SetColumn(playerData[setPlayersAt0].GetBlock(), 0);
+                Game_Grid.Children.Add(playerData[setPlayersAt0].GetBlock());
+                setPlayersAt0++;
+            }
+            RollOrWait.Content = _rollText;
         }
     }
 }

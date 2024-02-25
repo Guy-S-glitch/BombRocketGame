@@ -28,36 +28,19 @@ namespace SnakeLadder
         
         private static short _turn = 1;   //keep tracks of who's turn is it 
         private static short _randomRocketBomb;    //used to contain the random amount of spaces the rocket/bomb send you
-        private static short _currentRow, _futureRow, _currentColumn, _futureColumn, _currentPlace, _nextPlace;
+        private static short _currentRow, _futureRow, _currentColumn, _futureColumn, _currentPlace, _nextPlace;   //used to navigate the character on the grid
+        private static short[] bombRocketPlaces = { 4, 23, 29, 44, 63, 71, 15, 72, 81, 94, 98 };
 
         private static bool _bombFlag = false, _boostFlag = false;   //if player land on bomb raise flag
         private static bool _ricochet100Flag = false, _winFlag = false;   //flag raised to determain if the player surpass 100 and call relative animation
-
 
         private string _rollText = "You can roll", _waitText = "Wait";
         private string _exitMessage = "Are you sure you want to exit", _exitCaption = "Conform Exit", _exitYes = "thanks for playing", _exitNo = "returning to the game";
         private string _menuMessage = "Are you sure you want to return to the menu", _menuCaption = "Confirm Menu", _menuYes = "going back to menu", _menuNo = "returning to the game";
 
-        private void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            pregameLogic.How_much_SelectionChanged(sender, e, ref How_much, ref keep_data, ref select_players, ref info);
-        }
+        private void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e) { pregameLogic.How_much_SelectionChanged(sender, e, ref How_much, ref keep_data, ref select_players, ref info); }
+        private void info_Click(object sender, RoutedEventArgs e) { pregameLogic.info_Click(sender, e, ref info, ref keep_data, ref Dice, ref turn_text, ref Game_Grid, ref RollOrWait, _rollText); }
 
-        private void info_Click(object sender, RoutedEventArgs e)
-        {
-            pregameLogic.info_Click(sender, e, ref info, ref keep_data, ref Dice, ref turn_text);
-            short setPlayersAt0 = 0;
-            foreach (Player irrelevant in pregameLogic.playerData)
-            {
-                Game_Grid.Children.Remove(pregameLogic.playerData[setPlayersAt0].GetBlock());
-                Grid.SetRow(pregameLogic.playerData[setPlayersAt0].GetBlock(), 1);
-                Grid.SetColumn(pregameLogic.playerData[setPlayersAt0].GetBlock(), 0);
-                Game_Grid.Children.Add(pregameLogic.playerData[setPlayersAt0].GetBlock());
-                setPlayersAt0++;
-            }
-            RollOrWait.Content = _rollText;
-
-        }
 
         public menu()
         {
@@ -67,35 +50,8 @@ namespace SnakeLadder
             this.KeyDown += MainWindow_KeyDown;   //access responsive key game
         }
 
-        private void Dice_Click(object sender, RoutedEventArgs e)
-        {
-            RollOrWait.Content = _waitText;
-            Bomb_rocket_text.Text = string.Empty;
-            short rolled = (short)_random.Next(1, 7);   //present a cube throw
-            DiceOutput(rolled);   //the random number showed to the player
-            _currentPlace = (short)pregameLogic.playerData[_turn - 1].Place;
-            pregameLogic.playerData[_turn - 1].Place += rolled;//advance the player relatively to his throw
 
-            if (pregameLogic.playerData[_turn - 1].Place > 100)
-            {
-                _ricochet100Flag = true;
-                pregameLogic.playerData[_turn - 1].Place = (short)(100 - (pregameLogic.playerData[_turn - 1].Place - 100));    //if the player's roll surpass 100 he'll go back the amount he went over
-            }
-            else if (pregameLogic.playerData[_turn - 1].Place == 100)   //if the player land on 100 he wins
-            {
-                _winFlag = true;
-            }
-            _nextPlace = (short)pregameLogic.playerData[_turn - 1].Place;
-
-            
-            _currentRow = gridInfo()[0];
-            _futureRow = gridInfo()[1];
-            _currentColumn = gridInfo()[2];
-            _futureColumn = gridInfo()[3];
-
-            ColumnRowAnimation(sender, e);   //call the animation
-        }
-        private List<short> gridInfo() //contains where every player needs to go according to the roll
+        private void GetRowColumnInfo() //contains where every player needs to go according to the roll
         {
             //every row is 10 spaces, every row is from column 1-10
             _currentRow = (short)(_currentPlace == 0 ? 1 : _currentPlace % 10 != 0 ? 1 + _currentPlace / 10 : _currentPlace / 10);
@@ -106,76 +62,115 @@ namespace SnakeLadder
             _currentColumn = (short)(_currentPlace == 0 ? 0 : _currentRow % 2 != 0 && _currentPlace % 10 == 0 ? 10 : _currentRow % 2 == 0 && _currentPlace % 10 == 0 ? 1 : _currentRow % 2 == 0 && _currentPlace % 10 != 0 ? 11 - (_currentPlace % 10) : _currentPlace % 10);
             _futureColumn = (short)(_futureRow % 2 != 0 && _nextPlace % 10 == 0 ? 10 : _futureRow % 2 == 0 && _nextPlace % 10 == 0 ? 1 : _futureRow % 2 == 0 && _nextPlace % 10 != 0 ? 11 - (_nextPlace % 10) : _nextPlace % 10);
             // place=0 => column=0 // place=10 => row=1 => column=10  // place=20 => row=2 => column=1 // place=11 => row=2 => column= 11-(11%10) = 11-1 = 10 // place=1 => column= 1%10 = 1                                                                                                                                                                                              //example:10-> 10's row is 1 using the row's formula, 1%2!=0 and 10%10=0 -> column is set to 10
-
-            return new List<short> { _currentRow, _futureRow, _currentColumn, _futureColumn };
-        }  
-
-        private void Winner(object sender, EventArgs e)
-        {
-            MessageBox.Show($"player {_turn}. {pregameLogic.playerData[_turn - 1].Name} won");
-            Celebration celebration = new Celebration(pregameLogic.playerData, pregameLogic.GetPlayers());
-            this.Close();   // close current window
-            celebration.Show();   // goes to celebration screen
         }
 
-        private void ColumnMove_Completed(object sender, EventArgs e)
+        private void Dice_Click(object sender, RoutedEventArgs e)
         {
-            Int32Animation rowMove = new Int32Animation
+            DiceInitialValues();   //set values on every new roll
+            CheckIfSurpassOrLand100();   //check if player land or surpass 100 and give relative output
+            GetRowColumnInfo();   //get info about where the player now and where he'll be after his roll
+            ColumnAnimation(sender, e);   //call the animation
+        }
+        private void DiceInitialValues()
+        {
+            RollOrWait.Content = _waitText;
+            Bomb_rocket_text.Text = string.Empty;
+            short rolled = (short)_random.Next(1, 7);   //present a cube throw
+            DiceOutput(rolled);   //the random number showed to the player
+            _currentPlace = (short)pregameLogic.playerData[_turn - 1].Place;
+            pregameLogic.playerData[_turn - 1].Place += rolled;//advance the player relatively to his throw
+            _nextPlace = (short)pregameLogic.playerData[_turn - 1].Place;
+        }
+        private void DiceOutput(short roll) { decoration.DiceOutput(ref roll, ref Imagin); }   //showing suitable picture according to the player's roll
+        private void CheckIfSurpassOrLand100()
+        {
+            if (pregameLogic.playerData[_turn - 1].Place > 100)
             {
-                From = _currentRow,
-                Duration = TimeSpan.FromMilliseconds(100)
-            };
-            if (_bombFlag) rowMove.To = _currentRow - 1;
-            else rowMove.To = _currentRow + 1;
-            _currentRow = (short)rowMove.To;
-            rowMove.Completed += ColumnRowAnimation;
-            pregameLogic.playerData[_turn - 1].GetBlock().BeginAnimation(Grid.RowProperty, rowMove);
+                _ricochet100Flag = true;
+                pregameLogic.playerData[_turn - 1].Place = (short)(100 - (pregameLogic.playerData[_turn - 1].Place - 100));    //if the player's roll surpass 100 he'll go back the amount he went over
+                _nextPlace = (short)pregameLogic.playerData[_turn - 1].Place;
+            }
+            else if (pregameLogic.playerData[_turn - 1].Place == 100) _winFlag = true;
         }
 
-        private void ColumnRowAnimation(object sender, EventArgs e)
+
+        private void ColumnAnimation(object sender, EventArgs e)
+        {
+            Int32Animation columnMove = new Int32Animation();   //set our value for the column animation
+            ColumnAnimationInitialValues(ref columnMove);   //set the initial values
+            ColumnAnimationCases(ref columnMove);   //check which animation needed
+            pregameLogic.playerData[_turn - 1].GetBlock().BeginAnimation(Grid.ColumnProperty, columnMove);   //execute the animation
+        }
+        private void ColumnAnimationInitialValues(ref Int32Animation columnMove)
         {
             Dice.IsEnabled = false;   //while the animation running the dice button isn't available
-            Int32Animation columnMove = new Int32Animation
-            {
-                From = _currentColumn,
-                To = _futureColumn,
-                Duration = TimeSpan.FromMilliseconds(350)
-            };
-
-            if (_winFlag)
+            columnMove.From = _currentColumn;
+            columnMove.To = _futureColumn;
+            columnMove.Duration = TimeSpan.FromMilliseconds(350);
+        }
+        private void ColumnAnimationCases(ref Int32Animation columnMove)
+        {
+            if (_winFlag)   //player land on 100 block and won
             {
                 columnMove.Completed += Winner;
                 _winFlag = false;
             }
 
-            else if (_ricochet100Flag)
+            else if (_ricochet100Flag)   //player surpass 100 and needs to go back
             {
                 _ricochet100Flag = false;
                 columnMove.To = 1;
-                columnMove.Completed += ColumnRowAnimation;
+                columnMove.Completed += ColumnAnimation;
             }
 
-            else if (_currentRow != _futureRow)
+            else if (_currentRow != _futureRow)   //player need to change row to move
             {
-                if (_bombFlag) { if (_currentRow % 2 == 0) columnMove.To = 10; else columnMove.To = 1; }
-                else { if (_currentRow % 2 == 1) columnMove.To = 10; else columnMove.To = 1; }
-                columnMove.Completed += ColumnMove_Completed;
+                if (_bombFlag) { if (_currentRow % 2 == 0) columnMove.To = 10; else columnMove.To = 1; }   //player land on bomb therefore his movement will be negative
+                else { if (_currentRow % 2 == 1) columnMove.To = 10; else columnMove.To = 1; }   //else his movement will be positive
+                columnMove.Completed += RowAnimation;
             }
 
-            else columnMove.Completed += CheckForExtas;   //after player got to ouhisr final place check if he land on a bomb/rocket
+            else columnMove.Completed += LookForBombRocket;   //player's next block is on the same row which means we can only refer to the column
             _currentColumn = (short)columnMove.To;
-            pregameLogic.playerData[_turn - 1].GetBlock().BeginAnimation(Grid.ColumnProperty, columnMove);
         }
 
 
-        
-        private void CheckForExtas(object sender, EventArgs e)
+        private void RowAnimation(object sender, EventArgs e)
         {
-            short total = 0;   //count the total spaces player gained/lost cause of bombs/rockets
-            _boostFlag = false;   //if player land on rocket raise flag 
+            Int32Animation rowMove = new Int32Animation();
+            RowAnimationInitialValues(ref rowMove);
+            RowAnimationCases(ref rowMove);
+            pregameLogic.playerData[_turn - 1].GetBlock().BeginAnimation(Grid.RowProperty, rowMove);
+        }
+        private void RowAnimationInitialValues(ref Int32Animation rowMove)
+        {
+            rowMove.From = _currentRow;
+            rowMove.Duration = TimeSpan.FromMilliseconds(100);
+        }
+        private void RowAnimationCases(ref Int32Animation rowMove)
+        {
+            if (_bombFlag) rowMove.To = _currentRow - 1;
+            else rowMove.To = _currentRow + 1;
+            _currentRow = (short)rowMove.To;
+            rowMove.Completed += ColumnAnimation;
+        }
+
+
+        private void LookForBombRocket(object sender, EventArgs e)
+        {
+            BombRocketInitialValues();
+            BoockCheckBombRocket();
+            ExecuteBombRocketeffects(sender, e);
+        }
+        private static void BombRocketInitialValues()
+        {
+            _boostFlag = false;
             _bombFlag = false;
-            short[] bombRocketPlaces = { 4, 23, 29, 44, 63, 71, 15, 72, 81, 94, 98 };
-            for (short checkForBombRocket = 0; checkForBombRocket < bombRocketPlaces.Count(); checkForBombRocket++) if (_nextPlace == bombRocketPlaces[checkForBombRocket])
+        }
+        private void BoockCheckBombRocket()
+        {
+            for (short checkForBombRocket = 0; checkForBombRocket < bombRocketPlaces.Count(); checkForBombRocket++)
+                if (_nextPlace == bombRocketPlaces[checkForBombRocket])
                 {
                     Thread.Sleep(100);
                     if (checkForBombRocket < 6) //landing on rocket
@@ -188,26 +183,30 @@ namespace SnakeLadder
                         _randomRocketBomb = (short)_random.Next(-12, 0);
                         _bombFlag = true;
                     }
-                    total += _randomRocketBomb;
-                    _currentPlace = (short)pregameLogic.playerData[_turn - 1].Place;
-                    pregameLogic.playerData[_turn - 1].Place += _randomRocketBomb;
-                    _nextPlace = (short)pregameLogic.playerData[_turn - 1].Place;
+                    SetBombRocketEffects();
                     break;
                 }
+        }
+        private void SetBombRocketEffects()
+        {
+            _currentPlace = (short)pregameLogic.playerData[_turn - 1].Place;
+            pregameLogic.playerData[_turn - 1].Place += _randomRocketBomb;
+            _nextPlace = (short)pregameLogic.playerData[_turn - 1].Place;
 
+        }
+        private void ExecuteBombRocketeffects(object sender, EventArgs e)
+        {
             //give the player relative message about how much he gain/lost from landing on bombs/rockets
-            Bomb_rocket_text.Text = _bombFlag ? $"Player {_turn} hit bombs. in total lose {Math.Abs(total)} steps" : _boostFlag ? $"Player {_turn} hit boosts. in total gain {total} steps" : Bomb_rocket_text.Text;
-           
+            Bomb_rocket_text.Text = _bombFlag ? $"Player {_turn} hit bombs. in total lose {Math.Abs(_randomRocketBomb)} steps" : _boostFlag ? $"Player {_turn} hit boosts. in total gain {_randomRocketBomb} steps" : Bomb_rocket_text.Text;
+
             if (_boostFlag || _bombFlag)   //falg raised mean the player land on bomb/rocket and now he's in difference place, therefore we'll need to check if the player land on another bomb/rocket 
             {
-                _currentRow = gridInfo()[0];
-                _futureRow = gridInfo()[1];
-                _currentColumn = gridInfo()[2];
-                _futureColumn = gridInfo()[3];
-                ColumnRowAnimation(sender, e);
+                GetRowColumnInfo();
+                ColumnAnimation(sender, e);
             }
             else _next_turn_values(sender, e);
         }
+
 
         private void _next_turn_values(object sender, EventArgs e)
         {
@@ -217,9 +216,15 @@ namespace SnakeLadder
                 //  player=3, turn=3, next turn=1  // player=3, turn=2, next turn=3
             turn_text.Text = $"Player {_turn}'s turn";
         }
- 
 
-        private void DiceOutput(short roll) { decoration.DiceOutput(ref roll, ref Imagin); }   //showing suitable picture according to the player's roll
+        private void Winner(object sender, EventArgs e)
+        {
+            MessageBox.Show($"player {_turn}. {pregameLogic.playerData[_turn - 1].Name} won");
+            Celebration celebration = new Celebration(pregameLogic.playerData, pregameLogic.GetPlayers());
+            this.Close();   // close current window
+            celebration.Show();   // goes to celebration screen
+        }
+
         private void ColorTable() { decoration.ColorTable(Game_Grid); }   //since we have the movement path of the game, it's possible to set the movement to 1 space and fill each space with decoration
         private void MainWindow_KeyDown(object sender,KeyEventArgs e)   //once a key pressed enter the method
         {
