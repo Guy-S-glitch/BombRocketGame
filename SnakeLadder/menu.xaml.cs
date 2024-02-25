@@ -34,9 +34,9 @@ namespace SnakeLadder
         private static bool _bombFlag = false, _boostFlag = false;   //if player land on bomb raise flag
         private static bool _ricochet100Flag = false, _winFlag = false;   //flag raised to determain if the player surpass 100 and call relative animation
 
-        private string _rollText = "You can roll", _waitText = "Wait";
-        private string _exitMessage = "Are you sure you want to exit", _exitCaption = "Conform Exit", _exitYes = "thanks for playing", _exitNo = "returning to the game";
-        private string _menuMessage = "Are you sure you want to return to the menu", _menuCaption = "Confirm Menu", _menuYes = "going back to menu", _menuNo = "returning to the game";
+        private static string _rollText = "You can roll", _waitText = "Wait";
+        private static string _exitMessage = "Are you sure you want to exit", _exitCaption = "Conform Exit", _exitYes = "thanks for playing", _exitNo = "returning to the game";
+        private static string _menuMessage = "Are you sure you want to return to the menu", _menuCaption = "Confirm Menu", _menuYes = "going back to menu", _menuNo = "returning to the game";
 
         private void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e) { pregameLogic.How_much_SelectionChanged(sender, e, ref How_much, ref keep_data, ref select_players, ref info); }
         private void info_Click(object sender, RoutedEventArgs e) { pregameLogic.info_Click(sender, e, ref info, ref keep_data, ref Dice, ref turn_text, ref Game_Grid, ref RollOrWait, _rollText); }
@@ -137,10 +137,10 @@ namespace SnakeLadder
 
         private void RowAnimation(object sender, EventArgs e)
         {
-            Int32Animation rowMove = new Int32Animation();
-            RowAnimationInitialValues(ref rowMove);
-            RowAnimationCases(ref rowMove);
-            pregameLogic.playerData[_turn - 1].GetBlock().BeginAnimation(Grid.RowProperty, rowMove);
+            Int32Animation rowMove = new Int32Animation();   //set our value for the row animation
+            RowAnimationInitialValues(ref rowMove);   //set the initial values
+            RowAnimationCases(ref rowMove);   //check which animation needed
+            pregameLogic.playerData[_turn - 1].GetBlock().BeginAnimation(Grid.RowProperty, rowMove);   //execute the animation
         }
         private void RowAnimationInitialValues(ref Int32Animation rowMove)
         {
@@ -158,9 +158,9 @@ namespace SnakeLadder
 
         private void LookForBombRocket(object sender, EventArgs e)
         {
-            BombRocketInitialValues();
-            BoockCheckBombRocket();
-            ExecuteBombRocketeffects(sender, e);
+            BombRocketInitialValues();   //reset the needed values so they wont be effected by previous setting
+            BoockCheckBombRocket();   //check if the current block is bomb or rocket
+            ExecuteBombRocketeffects(sender, e);   //execute relative output
         }
         private static void BombRocketInitialValues()
         {
@@ -208,7 +208,7 @@ namespace SnakeLadder
         }
 
 
-        private void _next_turn_values(object sender, EventArgs e)
+        private void _next_turn_values(object sender, EventArgs e)   //set values for the next turn
         {
             RollOrWait.Content = _rollText;
             Dice.IsEnabled = true;
@@ -217,7 +217,7 @@ namespace SnakeLadder
             turn_text.Text = $"Player {_turn}'s turn";
         }
 
-        private void Winner(object sender, EventArgs e)
+        private void Winner(object sender, EventArgs e)   //once a player won, the current window close and the celebration window open
         {
             MessageBox.Show($"player {_turn}. {pregameLogic.playerData[_turn - 1].Name} won");
             Celebration celebration = new Celebration(pregameLogic.playerData, pregameLogic.GetPlayers());
@@ -241,9 +241,9 @@ namespace SnakeLadder
                     break;
             }
         }
-        private void back_Click(object sender, RoutedEventArgs e) { HomeConfirm(); }  //if player press menu button return to the menu 
-        private void exit_Click(object sender, RoutedEventArgs e) { ExitConfirm(); }//if player press the exit button exit the game
-        private void ExitConfirm()
+        private void back_Click(object sender, RoutedEventArgs e) { HomeConfirm(); } 
+        private void exit_Click(object sender, RoutedEventArgs e) { ExitConfirm(); }
+        private void ExitConfirm()   //ask if the player sure he want to exit
         {
             object var = MessageBox.Show(_exitMessage, _exitCaption, MessageBoxButton.YesNo);
             switch (var)
@@ -258,7 +258,7 @@ namespace SnakeLadder
             }
         }
 
-        private void HomeConfirm()
+        private void HomeConfirm()   //ask if the player sure he want to return to menu
         {
             object var = MessageBox.Show(_menuMessage, _menuCaption, MessageBoxButton.YesNo);
             switch (var)
