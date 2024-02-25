@@ -22,13 +22,13 @@ namespace gameLogic
                 players = (short)How_much.SelectedIndex;
                 How_much.IsEnabled = false;   //after the amount of players has chosen this combobox is unrelevent
                 //lablePlayers.Content = $"{players} players chosen";
-                for (short i = 0; i < players; i++) playerData.Add(new Player(i + 1, 0, new TextBlock()));   //initialize the stats of evert player
+                for (short i = 0; i < players; i++) playerData.Add(new Player((short)(i + 1), 0, new TextBlock()));   //initialize the stats of evert player
                 keep_data.ItemsSource = playerData;   //after we filled the needed stats we'll send the information to a listbox that will ask the players for the remaining needed information
 
 
                 for (short padd = 0; padd < players; padd++)
                 {
-                    playerData[padd].TextBlock.Padding = new Thickness(distanceFromLeft, 0, 0, distanceFromBottom);   //set a specipic place for every player so in case multiple player will be on the same box they could see their character 
+                    playerData[padd].GetBlock().Padding = new Thickness(distanceFromLeft, 0, 0, distanceFromBottom);   //set a specipic place for every player so in case multiple player will be on the same box they could see their character 
                                                                                                                       //since 6 players is the maximum amount of players we can have
                     distanceFromLeft += 25;
                     distanceFromLeft = (short)(padd == 2 ? 0 : distanceFromLeft);                              //order will be: 1)Left   2)Middle 3)Rigth  4)Left 5)Middle 6)Rigth
@@ -56,7 +56,7 @@ namespace gameLogic
                 {
                     if (string.IsNullOrEmpty(player.Name) || string.IsNullOrEmpty(player.strIcons)) throw new ArgumentNullException();   //name is requried
                                                                                                
-                    player.TextBlock.Text = player.strIcons;
+                    player.GetBlock().Text = player.strIcons;
                 }
                 //after reciving the needed info these boxes isn't necessary
                 info.Visibility = Visibility.Hidden;

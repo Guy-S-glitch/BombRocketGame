@@ -49,10 +49,10 @@ namespace SnakeLadder
             short setPlayersAt0 = 0;
             foreach (Player irrelevant in pregameLogic.playerData)
             {
-                Game_Grid.Children.Remove(pregameLogic.playerData[setPlayersAt0].TextBlock);
-                Grid.SetRow(pregameLogic.playerData[setPlayersAt0].TextBlock, 1);
-                Grid.SetColumn(pregameLogic.playerData[setPlayersAt0].TextBlock, 0);
-                Game_Grid.Children.Add(pregameLogic.playerData[setPlayersAt0].TextBlock);
+                Game_Grid.Children.Remove(pregameLogic.playerData[setPlayersAt0].GetBlock());
+                Grid.SetRow(pregameLogic.playerData[setPlayersAt0].GetBlock(), 1);
+                Grid.SetColumn(pregameLogic.playerData[setPlayersAt0].GetBlock(), 0);
+                Game_Grid.Children.Add(pregameLogic.playerData[setPlayersAt0].GetBlock());
                 setPlayersAt0++;
             }
             RollOrWait.Content = _rollText;
@@ -79,7 +79,7 @@ namespace SnakeLadder
             if (pregameLogic.playerData[_turn - 1].Place > 100)
             {
                 _ricochet100Flag = true;
-                pregameLogic.playerData[_turn - 1].Place = 100 - (pregameLogic.playerData[_turn - 1].Place - 100);    //if the player's roll surpass 100 he'll go back the amount he went over
+                pregameLogic.playerData[_turn - 1].Place = (short)(100 - (pregameLogic.playerData[_turn - 1].Place - 100));    //if the player's roll surpass 100 he'll go back the amount he went over
             }
             else if (pregameLogic.playerData[_turn - 1].Place == 100)   //if the player land on 100 he wins
             {
@@ -129,7 +129,7 @@ namespace SnakeLadder
             else rowMove.To = _currentRow + 1;
             _currentRow = (short)rowMove.To;
             rowMove.Completed += ColumnRowAnimation;
-            pregameLogic.playerData[_turn - 1].TextBlock.BeginAnimation(Grid.RowProperty, rowMove);
+            pregameLogic.playerData[_turn - 1].GetBlock().BeginAnimation(Grid.RowProperty, rowMove);
         }
 
         private void ColumnRowAnimation(object sender, EventArgs e)
@@ -164,7 +164,7 @@ namespace SnakeLadder
 
             else columnMove.Completed += CheckForExtas;   //after player got to ouhisr final place check if he land on a bomb/rocket
             _currentColumn = (short)columnMove.To;
-            pregameLogic.playerData[_turn - 1].TextBlock.BeginAnimation(Grid.ColumnProperty, columnMove);
+            pregameLogic.playerData[_turn - 1].GetBlock().BeginAnimation(Grid.ColumnProperty, columnMove);
         }
 
 
