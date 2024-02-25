@@ -113,7 +113,7 @@ namespace SnakeLadder
         private void Winner(object sender, EventArgs e)
         {
             MessageBox.Show($"player {_turn}. {pregameLogic.playerData[_turn - 1].Name} won");
-            Celebration celebration = new Celebration(pregameLogic.playerData, pregameLogic.players);
+            Celebration celebration = new Celebration(pregameLogic.playerData, pregameLogic.GetPlayers());
             this.Close();   // close current window
             celebration.Show();   // goes to celebration screen
         }
@@ -213,7 +213,7 @@ namespace SnakeLadder
         {
             RollOrWait.Content = _rollText;
             Dice.IsEnabled = true;
-            _turn = (short)(_turn == pregameLogic.players ? 1 : _turn + 1);
+            _turn = (short)(_turn == pregameLogic.GetPlayers() ? 1 : _turn + 1);
                 //  player=3, turn=3, next turn=1  // player=3, turn=2, next turn=3
             turn_text.Text = $"Player {_turn}'s turn";
         }

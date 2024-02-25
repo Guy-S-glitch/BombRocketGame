@@ -12,48 +12,43 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace SnakeLadder
 {
-    /// <summary>
-    /// Interaction logic for Celebration.xaml
-    /// </summary>
     public partial class Celebration : Window
     {
         private string _exitMessage = "Are you sure you want to exit", _exitCaption = "Conform Exit", _exitYes = "thanks for playing", _exitNo = "returning to the game";
         private string _menuMessage = "Are you sure you want to return to the menu", _menuCaption = "Confirm Menu", _menuYes = "going back to menu", _menuNo = "returning to the game";
-        private short _max, _addAtSortedWay, _numOfCurrentmax, _checkEveryPlayer;
-        private List<Player> _backUpList = new List<Player>();
+        private static string _first = "🥇 First", _second = "🥈 Second", _third = "🥉 third", _fourth = "Fourth", _fifth = "Fifth", _sixth = "Sixth";
+        private static short _max, _addAtSortedWay, _numOfCurrentmax, _checkEveryPlayer;
         private List<Label> _Ranks = new List<Label>()
             {
-                new Label{Content="🥇 First",Foreground=new SolidColorBrush(Colors.Gold)},
-                new Label{Content="🥈 Second",Foreground=new SolidColorBrush(Colors.Silver)},
-                new Label{Content="🥉 third",Foreground=new SolidColorBrush(Colors.Brown)},
-                new Label{Content="Fourth"},
-                new Label{Content="Fifth"},
-                new Label{Content="Sixth"}
+                new Label{Content=_first,Foreground=new SolidColorBrush(Colors.Gold)},
+                new Label{Content=_second,Foreground=new SolidColorBrush(Colors.Silver)},
+                new Label{Content=_third,Foreground=new SolidColorBrush(Colors.Brown)},
+                new Label{Content=_fourth},
+                new Label{Content=_fifth},
+                new Label{Content=_sixth}
             };
         public Celebration(List<Player> Data,short players)
         {
             InitializeComponent();
-
-            foreach (Label addLable in _Ranks)
-            {
-                ranks.Items.Add(addLable);
-            }
-            for(int deleteAt=5;deleteAt>=players;deleteAt--) ranks.Items.RemoveAt(deleteAt);
-
+            addPositions(players);
+            EndGame.ItemsSource = sortPlayersPosition(Data);
+        }
+        private static List<Player> sortPlayersPosition(List<Player> Data)
+        {
+            List<Player> _backUpList = new List<Player>();
             short count = (short)Data.Count;
             Player backUpPlayer = Data[0];
             foreach (Player player in Data) player.SetTrash(true);   //sort the players by their _max place value, after player declared as having the _max value we'll make this variable difference and will ignore it
             for (_checkEveryPlayer = 0; _checkEveryPlayer < count; _checkEveryPlayer++)
-                {
-                _max = 0;
-                _addAtSortedWay = 0;
-                _numOfCurrentmax = 0;
+            {
+                _max = 0; _addAtSortedWay = 0; _numOfCurrentmax = 0;
                 foreach (Player player in Data)
                 {
                     if (player.Place >= _max && player.GetTrash())
@@ -67,13 +62,17 @@ namespace SnakeLadder
                 _backUpList.Add(backUpPlayer);
                 Data[_addAtSortedWay].SetTrash(false);
             }
-            EndGame.ItemsSource = _backUpList;
+            return _backUpList;
         }
-
-        private void gif_MediaEnded(object sender, RoutedEventArgs e)
+        private void addPositions(short players)
         {
-            gif.Position = TimeSpan.FromMilliseconds(1);
+            foreach (Label addLable in _Ranks)
+            {
+                ranks.Items.Add(addLable);
+            }
+            for (int deleteAt = 5; deleteAt >= players; deleteAt--) ranks.Items.RemoveAt(deleteAt);
         }
+        private void gif_MediaEnded(object sender, RoutedEventArgs e) { gif.Position = TimeSpan.FromMilliseconds(1); }
 
         private void MainWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)   //once a key pressed enter the method
         {
