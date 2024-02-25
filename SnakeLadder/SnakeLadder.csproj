@@ -74,6 +74,9 @@
     <Compile Include="menu.xaml.cs">
       <DependentUpon>menu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="menuAnimation.xaml.cs">
+      <DependentUpon>menu.xaml</DependentUpon>
+    </Compile>
     <Page Include="Celebration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -143,9 +146,6 @@
   <ItemGroup>
     <Resource Include="images\finito.jpg" />
     <Resource Include="images\start.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\Celebration.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

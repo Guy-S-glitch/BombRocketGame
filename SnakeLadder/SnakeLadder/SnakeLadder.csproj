@@ -117,6 +117,7 @@
     <Resource Include="images\Dice_4.jpg" />
     <Resource Include="images\Dice_5.jpg" />
     <Resource Include="images\Dice_6.jpg" />
+
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
