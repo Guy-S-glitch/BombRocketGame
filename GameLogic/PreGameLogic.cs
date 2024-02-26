@@ -15,6 +15,7 @@ namespace gameLogic
         public List<string> strings = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };   //after failing to get the character  directly from the window the best option is to get the index of the chosen character  and compare it with list that will have the same values
         public List<Player> playerData = new List<Player>();      //keeps the data about every player
         public short players,distanceFromLeft = 0, distanceFromBottom = 0;
+        private static short _startPoint = 0;
         private static string _turnText = "Player 1's turn", _catchText = "fill everything please";
 
         public void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e,ref ComboBox How_much,ref ListBox keep_data, ref StackPanel select_players, ref Button info)
@@ -30,7 +31,7 @@ namespace gameLogic
         {
             players = (short)How_much.SelectedIndex;
             How_much.IsEnabled = false;   //after the amount of players has chosen this combobox is unrelevent
-            for (short i = 0; i < players; i++) playerData.Add(new Player((short)(i + 1), 0, new TextBlock()));   //initialize the stats of evert player
+            for (short i = 0; i < players; i++) playerData.Add(new Player((short)(i + 1), _startPoint, new TextBlock()));   //initialize the stats of evert player
             keep_data.ItemsSource = playerData;   //after we filled the needed stats we'll send the information to a listbox that will ask the players for the remaining needed information
         }
         private void placeForEveryCharacter()
