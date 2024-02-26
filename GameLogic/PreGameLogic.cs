@@ -15,7 +15,7 @@ namespace gameLogic
         public List<string> strings = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };   //after failing to get the character  directly from the window the best option is to get the index of the chosen character  and compare it with list that will have the same values
         public List<Player> playerData = new List<Player>();      //keeps the data about every player
         public short players,distanceFromLeft = 0, distanceFromBottom = 0;
-        private string _turnText = "Player 1's turn", _catchText = "fill everything please";
+        private static string _turnText = "Player 1's turn", _catchText = "fill everything please";
 
         public void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e,ref ComboBox How_much,ref ListBox keep_data, ref StackPanel select_players, ref Button info)
         {

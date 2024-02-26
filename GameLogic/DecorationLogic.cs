@@ -15,7 +15,7 @@ namespace GameLogic
 {
     public class Decoration
     {
-        private string _roll_1 = "images\\Dice_1.jpg", _roll_2 = "images\\Dice_2.jpg", _roll_3 = "images\\Dice_3.jpg", _roll_4 = "images\\Dice_4.jpg", _roll_5 = "images\\Dice_5.jpg", _roll_6 = "images\\Dice_6.jpg";
+        private static string _roll_1 = "images\\Dice_1.jpg", _roll_2 = "images\\Dice_2.jpg", _roll_3 = "images\\Dice_3.jpg", _roll_4 = "images\\Dice_4.jpg", _roll_5 = "images\\Dice_5.jpg", _roll_6 = "images\\Dice_6.jpg";
         public void DiceOutput(ref short roll,ref Image Imagin)   //showing suitable picture according to the player's roll
         {
             switch (roll)

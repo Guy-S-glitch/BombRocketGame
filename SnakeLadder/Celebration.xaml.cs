@@ -21,8 +21,8 @@ namespace SnakeLadder
 {
     public partial class Celebration : Window
     {
-        private string _exitMessage = "Are you sure you want to exit", _exitCaption = "Conform Exit", _exitYes = "thanks for playing", _exitNo = "returning to the game";
-        private string _menuMessage = "Are you sure you want to return to the menu", _menuCaption = "Confirm Menu", _menuYes = "going back to menu", _menuNo = "returning to the game";
+        private static string _exitMessage = "Are you sure you want to exit", _exitCaption = "Conform Exit", _exitYes = "thanks for playing", _exitNo = "returning to the game";
+        private static string _menuMessage = "Are you sure you want to return to the menu", _menuCaption = "Confirm Menu", _menuYes = "going back to menu", _menuNo = "returning to the game";
         private static string _first = "🥇 First", _second = "🥈 Second", _third = "🥉 third", _fourth = "Fourth", _fifth = "Fifth", _sixth = "Sixth";
         private static short _max, _addAtSortedWay, _numOfCurrentmax, _checkEveryPlayer;
         private List<Label> _Ranks = new List<Label>()
