@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameLogic
 {
-    internal class Enum
+    public class Enum
     {
         public enum RocketBomb 
         { 

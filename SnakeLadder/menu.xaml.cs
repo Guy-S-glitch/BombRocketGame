@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static GameLogic.Enum;
 namespace SnakeLadder
 {
     public partial class menu : Window
@@ -25,25 +26,16 @@ namespace SnakeLadder
         Decoration decoration = new Decoration();
         PreGame pregameLogic = new PreGame();
 
-        public enum RocketBomb { rocket1 = 4, rocket2 = 23,rocket3 = 29,rocket4 = 44,rocket5 = 63,rocket6 = 71,bomb1 = 15,bomb2 = 72,bomb3 = 81,bomb4 = 94,bomb5 = 98}
+       
 
         private static Random _random = new Random();
         
         private static short _turn = 1;   //keep tracks of who's turn is it 
         private static short _randomRocketBomb;    //used to contain the random amount of spaces the rocket/bomb send you
         private static short _currentRow, _futureRow, _currentColumn, _futureColumn, _currentPlace, _nextPlace;   //used to navigate the character on the grid
-        private static short[] _bombRocketPlaces = { 
-            (short)RocketBomb.rocket1, 
-            (short)RocketBomb.rocket2, 
-            (short)RocketBomb.rocket3 , 
-            (short)RocketBomb.rocket4, 
-            (short)RocketBomb.rocket5, 
-            (short)RocketBomb.rocket6, 
-            (short)RocketBomb.bomb1, 
-            (short)RocketBomb.bomb2, 
-            (short)RocketBomb.bomb3, 
-            (short)RocketBomb.bomb4, 
-            (short)RocketBomb.bomb5 
+        private static short[] _bombRocketPlaces = { (short)RocketBomb.rocket1, (short)RocketBomb.rocket2, (short)RocketBomb.rocket3 , (short)RocketBomb.rocket4, 
+                                                     (short)RocketBomb.rocket5, (short)RocketBomb.rocket6, (short)RocketBomb.bomb1,  (short)RocketBomb.bomb2, 
+                                                     (short)RocketBomb.bomb3,  (short)RocketBomb.bomb4, (short)RocketBomb.bomb5 
         };
         private static bool _bombFlag = false, _boostFlag = false;   //if player land on bomb raise flag
         private static bool _ricochet100Flag = false, _winFlag = false;   //flag raised to determain if the player surpass 100 and call relative animation
