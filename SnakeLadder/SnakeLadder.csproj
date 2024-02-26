@@ -147,6 +147,9 @@
     <Resource Include="images\finito.jpg" />
     <Resource Include="images\start.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="celebrate.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
