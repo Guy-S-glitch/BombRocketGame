@@ -7,9 +7,11 @@ Screen size of at least 1050x520
 
 # Rules
 <ul>
-            <li> 💣 Lose 1-12 spaces</li>
-            <li> 🚀 Gain 1-6 spaces</li>
-            <li> 🛬 First to land on 100 wins</li>
-            <li> ❌ Press Esc to exit </li>
-            <li> 🏠 Press Home to go to menu </li>
+            <li>💣 Lose 1-12 spaces</li>
+            <li>🚀 Gain 1-6 spaces</li> 
+            <li>🛬 First to land on 100 wins</li>
+            <li>Press Esc or Click the ❌</li>
+            <li>Press Home or Click the 🏠</li>
+            <li>Press Tab or Click the 🎲</li>
+            <li>✋ wait for the animation to stop to roll again</li>
 </ul>
