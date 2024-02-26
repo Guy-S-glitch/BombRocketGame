@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DecorationLogic.cs" />
+    <Compile Include="Models\Enum.cs" />
     <Compile Include="PreGameLogic.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

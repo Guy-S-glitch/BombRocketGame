@@ -4,13 +4,13 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using static GameLogic.Enum;
 
 namespace GameLogic.Models
 {
 
     public class Player
     {
-
         private List<string> _charactesList = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };
         public List<string> charactersHere { get { return _charactesList; } }
         public short Id { get; set; }

@@ -11,6 +11,7 @@ namespace gameLogic
 {
     public class PreGame
     {
+
         public List<string> strings = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };   //after failing to get the character  directly from the window the best option is to get the index of the chosen character  and compare it with list that will have the same values
         public List<Player> playerData = new List<Player>();      //keeps the data about every player
         public short players,distanceFromLeft = 0, distanceFromBottom = 0;
