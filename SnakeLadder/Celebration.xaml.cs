@@ -16,6 +16,8 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.IO;
+using Path = System.IO.Path;
 
 namespace SnakeLadder
 {
@@ -39,6 +41,9 @@ namespace SnakeLadder
             InitializeComponent();
             addPositions(players);
             EndGame.ItemsSource = sortPlayersPosition(Data);
+
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "images", "celebrate.gif");
+            gif.Source = new Uri(path);
         }
         private static List<Player> sortPlayersPosition(List<Player> Data)
         {

@@ -157,4 +157,8 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\SixLabors.ImageSharp.3.1.2\build\SixLabors.ImageSharp.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SixLabors.ImageSharp.3.1.2\build\SixLabors.ImageSharp.props'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(ProjectDir)images" "$(TargetDir)images" /E /I /Y
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>

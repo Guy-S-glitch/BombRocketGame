@@ -18,14 +18,14 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static GameLogic.Enum;
+
 namespace SnakeLadder
 {
     public partial class menu : Window
     {
         Decoration decoration = new Decoration();
         PreGame pregameLogic = new PreGame();
-
-        public enum RocketBomb { rocket1 = 4, rocket2 = 23,rocket3 = 29,rocket4 = 44,rocket5 = 63,rocket6 = 71,bomb1 = 15,bomb2 = 72,bomb3 = 81,bomb4 = 94,bomb5 = 98}
 
         private static Random _random = new Random();
         
@@ -55,6 +55,14 @@ namespace SnakeLadder
         private void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e) { pregameLogic.How_much_SelectionChanged(sender, e, ref How_much, ref keep_data, ref select_players, ref info); }
         private void info_Click(object sender, RoutedEventArgs e) { pregameLogic.info_Click(sender, e, ref info, ref keep_data, ref Dice, ref turn_text, ref Game_Grid, ref RollOrWait, _rollText); }
 
+        public menu()
+        {
+            InitializeComponent();
+            ColorTable();   // create the playing board
+            How_much.SelectedIndex = 0;
+            this.KeyDown += MainWindow_KeyDown;   //access responsive key game
+        }
+
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is ComboBox comboBox && comboBox.SelectedItem != null)
@@ -64,15 +72,6 @@ namespace SnakeLadder
             }
         }
         private void ColorTable() { decoration.ColorTable(Game_Grid); }   //since we have the movement path of the game, it's possible to set the movement to 1 space and fill each space with decoration
-
-        public menu()
-        {
-            InitializeComponent();
-            ColorTable();   // create the playing board
-            How_much.SelectedIndex = 0 ;
-            this.KeyDown += MainWindow_KeyDown;   //access responsive key game
-        }
-
 
         private void GetRowColumnInfo() //contains where every player needs to go according to the roll
         {
