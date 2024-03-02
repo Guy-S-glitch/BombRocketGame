@@ -1,10 +1,6 @@
-﻿using gameLogic;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Animation;
-using static GameLogic.Enum;
 
 namespace GameLogic.Models
 {
