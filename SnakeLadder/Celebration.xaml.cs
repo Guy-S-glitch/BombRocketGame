@@ -34,7 +34,8 @@ namespace SnakeLadder
             List<Player> _backUpList = new List<Player>();
             short count = (short)Data.Count;
             Player backUpPlayer = Data[0];
-            foreach (Player player in Data) player.SetTrash(true);   //sort the players by their _max place value, after player declared as having the _max value we'll make this variable difference and will ignore it
+            // Sort the players by their _max place value, after player declared as having the _max value we'll make this variable difference and will ignore it
+            foreach (Player player in Data) player.SetTrash(true);   
             for (_checkEveryPlayer = 0; _checkEveryPlayer < count; _checkEveryPlayer++)
             {
                 _max = 0; _addAtSortedWay = 0; _numOfCurrentmax = 0;
@@ -63,20 +64,34 @@ namespace SnakeLadder
         }
         private void gif_MediaEnded(object sender, RoutedEventArgs e) { gif.Position = TimeSpan.FromMilliseconds(1); }
 
-        private void MainWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)   //once a key pressed enter the method
+
+        // Once a key pressed enter the method
+        private void MainWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)   
         {
             switch (e.Key)
             {
-                case Key.Escape:   //if player press esc ask him if he's sure he want to exit the game
+                case Key.Escape:
+                    // If player press esc ask him if he's sure he want to exit the gam
                     ExitConfirm();
                     break;
-                case Key.Home:   //if player press home ask him if he's sure he want to return to the menu
+                case Key.Home:
+                    // If player press home ask him if he's sure he want to return to the menu
                     HomeConfirm();
                     break;
             }
         }
-        private void back_Click(object sender, RoutedEventArgs e) { HomeConfirm(); }   //if player press menu button return to the menu 
-        private void exit_Click(object sender, RoutedEventArgs e) { ExitConfirm(); }  //if player press the exit button exit the game
+
+        // If player press menu button return to the menu
+        private void back_Click(object sender, RoutedEventArgs e) 
+        { 
+            HomeConfirm();
+        }
+
+        // If player press the exit button exit the game
+        private void exit_Click(object sender, RoutedEventArgs e) 
+        {
+            ExitConfirm();
+        }  
         private void ExitConfirm()
         {
             object var = MessageBox.Show(_exitMessage, _exitCaption, MessageBoxButton.YesNo);

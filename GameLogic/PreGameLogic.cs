@@ -8,28 +8,37 @@ namespace gameLogic
 {
     public class PreGame
     {
-
-        public List<string> strings = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };   //after failing to get the character  directly from the window the best option is to get the index of the chosen character  and compare it with list that will have the same values
-        public List<Player> playerData = new List<Player>();      //keeps the data about every player
+        // After failing to get the character  directly from the window the best option is to get the index of the chosen character
+        // and compare it with list that will have the same values
+        public List<string> strings = new List<string>() { "🐱", "🐼", "🐻", "🐨", "🐮", "🐷", "🐹", "🐭", "🐰", "🐵", "🐶" };
+        // Keeps the data about every player
+        public List<Player> playerData = new List<Player>();      
         public short players,distanceFromLeft = 0, distanceFromBottom = 0;
         private static short _startPoint = 0;
         private static string _turnText = "Player 1's turn", _catchText = "fill everything please";
 
         public void How_much_SelectionChanged(object sender, SelectionChangedEventArgs e,ref ComboBox How_much,ref ListBox keep_data, ref StackPanel select_players, ref Button info)
         {
-            if (How_much.SelectedIndex != 0)   //the only way to set how many player are there is to choose item with number value
+            // The only way to set how many player are there is to choose item with number value
+            if (How_much.SelectedIndex != 0)   
             {
-                initialPlayerSelectStats(How_much, ref keep_data);   //set data about every player
-                placeForEveryCharacter();   //set a specipic place for every player so in case multiple player will be on the same box they could see their character 
-                hideShow(ref How_much, ref select_players, ref info, ref keep_data);   //ignore unnecessary parts and show the relevant ones
+                // Set data about every player
+                initialPlayerSelectStats(How_much, ref keep_data);
+                // Set a specipic place for every player so in case multiple player will be on the same box they could see their character
+                placeForEveryCharacter();
+                // Ignore unnecessary parts and show the relevant ones
+                hideShow(ref How_much, ref select_players, ref info, ref keep_data);   
             }
         }
         private void initialPlayerSelectStats(ComboBox How_much, ref ListBox keep_data)
         {
             players = (short)How_much.SelectedIndex;
-            How_much.IsEnabled = false;   //after the amount of players has chosen this combobox is unrelevent
-            for (short i = 0; i < players; i++) playerData.Add(new Player((short)(i + 1), _startPoint, new TextBlock()));   //initialize the stats of evert player
-            keep_data.ItemsSource = playerData;   //after we filled the needed stats we'll send the information to a listbox that will ask the players for the remaining needed information
+            // After the amount of players has chosen this combobox is unrelevent
+            How_much.IsEnabled = false;
+            // Initialize the stats of evert player
+            for (short i = 0; i < players; i++) playerData.Add(new Player((short)(i + 1), _startPoint, new TextBlock()));
+            // After we filled the needed stats we'll send the information to a listbox that will ask the players for the remaining needed information
+            keep_data.ItemsSource = playerData;   
         }
         private void placeForEveryCharacter()
         {
@@ -37,8 +46,10 @@ namespace gameLogic
             {
                 playerData[padd].GetBlock().Padding = new Thickness(distanceFromLeft, 0, 0, distanceFromBottom);   
                 distanceFromLeft += 25;
-                distanceFromLeft = (short)(padd == 2 ? 0 : distanceFromLeft);                              //order will be: 1)Left   2)Middle 3)Rigth  4)Left 5)Middle 6)Rigth
-                distanceFromBottom = (short)(padd == 2 ? distanceFromBottom + 25 : distanceFromBottom);    //order will be: 1)Bottom 2)Bottom 3)Bottom 4)Top  5)Top    6)Top
+                // Order will be: 1)Left   2)Middle 3)Rigth  4)Left 5)Middle 6)Rigth
+                distanceFromLeft = (short)(padd == 2 ? 0 : distanceFromLeft);
+                // Order will be: 1)Bottom 2)Bottom 3)Bottom 4)Top  5)Top 6)Top
+                distanceFromBottom = (short)(padd == 2 ? distanceFromBottom + 25 : distanceFromBottom);    
             }
         }
         private void hideShow(ref ComboBox How_much, ref StackPanel select_players, ref Button info, ref ListBox keep_data)
@@ -46,7 +57,7 @@ namespace gameLogic
             How_much.Visibility = Visibility.Hidden;
             select_players.Visibility = Visibility.Hidden;
 
-            //after selecting how many playing now we need to know information on each player
+            // After selecting how many playing now we need to know information on each player
             info.Visibility = Visibility.Visible;
             keep_data.Visibility = Visibility.Visible;
         }
@@ -54,8 +65,9 @@ namespace gameLogic
 
 
         public void info_Click(object sender, RoutedEventArgs e, ref Button info, ref ListBox keep_data, ref Button Dice, ref TextBlock turn_text,ref Grid Game_Grid,ref Label RollOrWait,string _rollText)
-        { 
-            try   //there will be an error if the player will send null info, thus we'll use try & catch
+        {
+            // There will be an error if the player will send null info, thus we'll use try & catch
+            try
             {
                 CheckNullException(ref playerData);
                 gameModeSetting(ref info, ref keep_data, ref Dice, ref turn_text);
@@ -68,18 +80,21 @@ namespace gameLogic
         {
             foreach (Player player in playerData)
             {
-                if (string.IsNullOrEmpty(player.Name) || string.IsNullOrEmpty(player.strIcons)) throw new ArgumentNullException();   //name and icon is requried
+                // Name and icon is requried
+                if (string.IsNullOrEmpty(player.Name) || string.IsNullOrEmpty(player.strIcons)) throw new ArgumentNullException();   
 
                 player.GetBlock().Text = player.strIcons;
             }
         }
         private void gameModeSetting(ref Button info, ref ListBox keep_data, ref Button Dice, ref TextBlock turn_text)
         {
-            //after reciving the needed info these boxes isn't necessary
+            // After reciving the needed info these boxes isn't necessary
             info.Visibility = Visibility.Hidden;
             keep_data.Visibility = Visibility.Hidden;
-            Dice.IsEnabled = true;   //make the dice clickable
-            turn_text.Text = _turnText;   //since it's the start, it's player 1's turn
+            // Make the dice clickable
+            Dice.IsEnabled = true;
+            // Since it's the start, it's player 1's turn
+            turn_text.Text = _turnText;   
         }
         private void executeSetting(ref Grid Game_Grid, ref Label RollOrWait, string _rollText)
         {
