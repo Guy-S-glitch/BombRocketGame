@@ -1,7 +1,7 @@
 ﻿using gameLogic;
 using GameLogic;
+using GameLogic.Models.Enums;
 using System;
-using static GameLogic.Enum;
 
 namespace SnakeLadder
 {
