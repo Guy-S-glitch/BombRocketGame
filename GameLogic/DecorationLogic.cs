@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using System.Collections;
-using System.Reflection.Emit;
-using System.Data.Common;
 
 namespace GameLogic
 {
     public class Decoration
     {
         private static string _roll_1 = "images\\Dice_1.jpg", _roll_2 = "images\\Dice_2.jpg", _roll_3 = "images\\Dice_3.jpg", _roll_4 = "images\\Dice_4.jpg", _roll_5 = "images\\Dice_5.jpg", _roll_6 = "images\\Dice_6.jpg";
-        public void DiceOutput(ref short roll,ref Image Imagin)   //showing suitable picture according to the player's roll
+        
+        // Showing suitable picture according to the player's roll
+        public void DiceOutput(ref short roll,ref Image Imagin)   
         {
             switch (roll)
             {
@@ -34,11 +29,14 @@ namespace GameLogic
                     Imagin.Source = new BitmapImage(new Uri(_roll_6, UriKind.Relative)); break;
             }
         }
-        public void ColorTable(Grid Game_Grid)   //since we have the movement path of the game, it's possible to set the movement to 1 space and fill each space with decoration
+
+        // Since, we have the movement path of the game, it's possible to set the movement to 1 space and fill each space with decoration
+        public void ColorTable(Grid Game_Grid)   
         {
             for (short start=1;start<=100;start++)
             {
-                LinearGradientBrush myLinearGradientBrush = new LinearGradientBrush();   //make rainbow color
+                // Make rainbow color
+                LinearGradientBrush myLinearGradientBrush = new LinearGradientBrush();   
                 populateLinearBrush(ref myLinearGradientBrush);
                 System.Windows.Controls.Label label = new System.Windows.Controls.Label();
                 populateLabel(ref label, start, myLinearGradientBrush);
@@ -61,10 +59,13 @@ namespace GameLogic
 
         private void populateLabel(ref System.Windows.Controls.Label label,short start, LinearGradientBrush myLinearGradientBrush)
         {
-            label.Background = start % 2 == 0 ? new SolidColorBrush(System.Windows.Media.Color.FromRgb(175, 191, 29)) : new SolidColorBrush(System.Windows.Media.Color.FromRgb(156, 153, 81));   //we'll have 2 colors fill the table, every space the color will change
+            // We'll have 2 colors fill the table, every space the color will change
+            label.Background = start % 2 == 0 ? new SolidColorBrush(System.Windows.Media.Color.FromRgb(175, 191, 29)) : new SolidColorBrush(System.Windows.Media.Color.FromRgb(156, 153, 81));   
             label.BorderThickness = new Thickness(1);
-            label.BorderBrush = myLinearGradientBrush;   //paint the border with the colors we set
-            label.Content = start;   //every space will have it's own number
+            // Paint the border with the colors we set
+            label.BorderBrush = myLinearGradientBrush;
+            // Every space will have it's own number
+            label.Content = start;   
             label.FontSize = 18;
             label.HorizontalContentAlignment = HorizontalAlignment.Left;
             label.VerticalContentAlignment = VerticalAlignment.Top;
